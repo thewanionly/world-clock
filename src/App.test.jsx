@@ -2,62 +2,19 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 
+import { myCity, ALLOWED_CITIES } from './utilities/constants'
 import { getLocalTime, getTimeDifference, formatTimeDifference } from './utilities/helpers'
+
 import App from './App'
+import StoreProvider from './store/StoreProvider'
 import CityCard from './components/CityCard'
-import Cities from './components/Cities'
-
-const myCity = {
-  name: 'Cebu City',
-  timezone: 'Asia/Manila',
-  timezoneAbbrevation: 'PST'
-}
-
-const ALLOWED_CITIES = [
-  {
-    label: 'Singapore',
-    value: 'Asia/Singapore'
-  },
-  {
-    label: 'Tokyo',
-    value: 'Asia/Tokyo'
-  },
-  {
-    label: 'Seoul',
-    value: 'Asia/Seoul'
-  },
-  {
-    label: 'Melbourne',
-    value: 'Australia/Melbourne'
-  },
-  {
-    label: 'Sydney',
-    value: 'Australia/Sydney'
-  },
-  {
-    label: 'London',
-    value: 'Europe/London'
-  },
-  {
-    label: 'Paris',
-    value: 'Europe/Paris'
-  },
-  {
-    label: 'Berlin',
-    value: 'Europe/Berlin'
-  },
-  {
-    label: 'New York',
-    value: 'America/New_York'
-  },
-  {
-    label: 'Los Angeles',
-    value: 'America/Los_Angeles'
-  }
-]
 
 const setup = () => {
-  render(<App />)
+  render(
+    <StoreProvider>
+      <App />
+    </StoreProvider>
+  )
 }
 
 describe('My City section', () => {
@@ -114,7 +71,11 @@ describe('Cities section', () => {
 
 describe('Addding a city', () => {
   const setup = () => {
-    render(<App />)
+    render(
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    )
 
     const addCityButton = screen.getByRole('button', { name: 'Add city' })
     userEvent.click(addCityButton)
@@ -203,8 +164,11 @@ describe('Addding a city', () => {
     })
 
     it('can add a new city without short label', async () => {
-      render(<App />)
-
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
       // Check the existing cities
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
@@ -252,7 +216,11 @@ describe('Addding a city', () => {
     })
 
     it('can add a new city with short label', async () => {
-      render(<App />)
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
 
       // Check the existing cities
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
@@ -304,7 +272,11 @@ describe('Addding a city', () => {
     })
 
     it('does not include the already added cities in the city name options', async () => {
-      render(<App />)
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
 
       // Check the existing cities
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
@@ -348,7 +320,11 @@ describe('Addding a city', () => {
     })
 
     it('disabled "Add city" button when there are already 4 cities in the list', async () => {
-      render(<App />)
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
 
       // Add city four times
       for (let i = 0; i < 4; i++) {
@@ -430,7 +406,11 @@ describe('City Card component', () => {
   })
 
   it('opens Delete city confirmation modal after clicking delete button', async () => {
-    render(<App />)
+    render(
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    )
 
     expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
@@ -459,7 +439,11 @@ describe('City Card component', () => {
 
 describe('Deleting a city', () => {
   const setup = async () => {
-    render(<App />)
+    render(
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    )
 
     // Open add modal
     userEvent.click(screen.getByRole('button', { name: 'Add city' }))
@@ -531,7 +515,11 @@ describe('Deleting a city', () => {
     })
 
     it('deletes the city from the list when Delete button is clicked', async () => {
-      render(<App />)
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
 
       // Open add modal
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))
@@ -602,7 +590,11 @@ describe('Deleting a city', () => {
     })
 
     it('shows the city back in the Add city options after deleting the city from the list', async () => {
-      render(<App />)
+      render(
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      )
 
       // Open add modal
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))

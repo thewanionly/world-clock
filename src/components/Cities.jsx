@@ -1,7 +1,13 @@
-import CityCard from './CityCard'
-import Button from './Button'
+import { useContext } from 'react'
 
-const Cities = ({ baseCity, cities = [], handleShowModal }) => {
+import { myCity } from '../utilities/constants'
+
+import StoreContext from '../store/storeContext'
+import CityCard from './CityCard'
+
+const Cities = () => {
+  const { cities, handleShowModal } = useContext(StoreContext)
+
   return (
     <section className='cities'>
       <div className='container cities__container'>
@@ -11,7 +17,7 @@ const Cities = ({ baseCity, cities = [], handleShowModal }) => {
               key={city.timezone}
               className='cities__city-item'
               city={city}
-              baseCity={baseCity}
+              baseCity={myCity}
               handleShowModal={handleShowModal}
             />
           ))}

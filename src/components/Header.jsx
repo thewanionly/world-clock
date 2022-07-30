@@ -1,9 +1,13 @@
+import { useContext } from 'react'
 import { myCity } from '../utilities/constants'
 
+import StoreContext from '../store/storeContext'
 import Button from './Button'
 import Clock from './Clock'
 
-const Header = ({ cities, handleShowModal }) => {
+const Header = () => {
+  const { cities, handleShowModal } = useContext(StoreContext)
+
   return (
     <section className='header my-city'>
       <div className='container header__container'>

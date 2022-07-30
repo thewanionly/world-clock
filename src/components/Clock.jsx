@@ -9,7 +9,7 @@ const CLOCK_TAG_MAP = {
 
 const Clock = ({ className = '', timezone, size = 'large', dataTestId }) => {
   const [time] = useRealTimeClock(timezone)
-  console.log('Clock')
+
   const ClockTag = CLOCK_TAG_MAP[size]
 
   return (

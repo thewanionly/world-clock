@@ -1,8 +1,11 @@
-import { memo } from 'react'
+import { memo, useContext } from 'react'
 
+import StoreContext from '../store/storeContext'
 import Modal from './Modal'
 
-const DeleteCityModal = memo(({ data, setCities, handleClose }) => {
+const DeleteCityModal = memo(({ data }) => {
+  const { setCities, handleClose } = useContext(StoreContext)
+
   const handleDelete = () => {
     setCities((prevCities) => prevCities.filter((city) => city.timezone !== data.timezone))
 
