@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useRealTimeClock } from './utilities/hooks'
 
 import CityCard from './components/CityCard'
+import AddCityModal from './components/AddCityModal'
 
 const App = () => {
   const myCity = {
@@ -11,6 +12,7 @@ const App = () => {
   }
 
   const [myLocalTime] = useRealTimeClock(myCity.timezone)
+  const [showAddModal, setShowAddModal] = useState(false)
   const [cities, setCities] = useState([
     {
       name: 'London',
@@ -36,8 +38,17 @@ const App = () => {
     }
   ])
 
+  const handleShowModal = () => {
+    setShowAddModal(true)
+  }
+
+  const handleCloseModal = useCallback(() => {
+    setShowAddModal(false)
+  }, [])
+
   return (
     <div className='app'>
+      {showAddModal && <AddCityModal handleClose={handleCloseModal} />}
       <section className='my-city'>
         <div className='container'>
           <h3 data-testid='my-city-name'>{myCity.name}</h3>
@@ -46,7 +57,9 @@ const App = () => {
       </section>
       <section className='cities'>
         <div className='container cities__container'>
-          <button className='cities__add-button'>Add city</button>
+          <button className='cities__add-button' onClick={handleShowModal}>
+            Add city
+          </button>
           <div className='cities__city-list' data-testid='city-list'>
             {cities.map((city) => (
               <CityCard
