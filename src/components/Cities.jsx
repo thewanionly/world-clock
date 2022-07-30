@@ -6,7 +6,7 @@ const Cities = ({ baseCity, cities = [], handleShowModal }) => {
       <div className='container cities__container'>
         <button
           className='cities__add-button'
-          onClick={handleShowModal}
+          onClick={() => handleShowModal('add')}
           disabled={cities.length >= 4}
         >
           Add city
@@ -18,6 +18,7 @@ const Cities = ({ baseCity, cities = [], handleShowModal }) => {
               className='cities__city-item'
               city={city}
               baseCity={baseCity}
+              handleShowModal={handleShowModal}
             />
           ))}
         </div>

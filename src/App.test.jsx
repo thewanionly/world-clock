@@ -94,6 +94,7 @@ describe('Cities section', () => {
     setup()
 
     expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
 
     const addCityButton = screen.getByRole('button', { name: 'Add city' })
     userEvent.click(addCityButton)
@@ -138,57 +139,7 @@ describe('Cities section', () => {
   })
 })
 
-describe('City Card component', () => {
-  const city = {
-    name: 'London',
-    label: 'Nice city',
-    timezone: 'Europe/London',
-    timezoneAbbreviation: 'BST'
-  }
-
-  const setup = () => {
-    render(<CityCard city={city} baseCity={myCity} />)
-  }
-
-  it('displays city name', () => {
-    setup()
-
-    const cityName = screen.getByTestId('city-name')
-    expect(cityName.textContent).toBe(city.name)
-  })
-
-  it('displays city label', () => {
-    setup()
-
-    const cityLabel = screen.getByTestId('city-label')
-    expect(cityLabel.textContent).toBe(city.label)
-  })
-
-  it('displays city time', () => {
-    setup()
-
-    const cityTime = screen.getByTestId('city-time')
-    expect(cityTime.textContent).toBe(getLocalTime(city.timezone))
-  })
-
-  it('displays city timezone abbreviation', () => {
-    setup()
-
-    const cityTmzAbbrev = screen.getByTestId('city-tmz-abbrev')
-    expect(cityTmzAbbrev.textContent).toBe(city.timezoneAbbreviation)
-  })
-
-  it(`displays time difference between the city's timezone and the base timezone`, () => {
-    setup()
-
-    const cityTimeDiff = screen.getByTestId('city-time-diff')
-    expect(cityTimeDiff.textContent).toBe(
-      formatTimeDifference(getTimeDifference(myCity.timezone, city.timezone), myCity.name)
-    )
-  })
-})
-
-describe('Add modal', () => {
+describe('Addding a city', () => {
   const setup = () => {
     render(<App />)
 
@@ -423,4 +374,126 @@ describe('Add modal', () => {
       expect(screen.getByLabelText('Short label')).toHaveValue(allowedText)
     })
   })
+})
+
+describe('City Card component', () => {
+  const city = {
+    name: 'London',
+    label: 'Nice city',
+    timezone: 'Europe/London',
+    timezoneAbbreviation: 'BST'
+  }
+
+  const setup = () => {
+    render(<CityCard city={city} baseCity={myCity} />)
+  }
+
+  it('displays city name', () => {
+    setup()
+
+    const cityName = screen.getByTestId('city-name')
+    expect(cityName.textContent).toBe(city.name)
+  })
+
+  it('displays city label', () => {
+    setup()
+
+    const cityLabel = screen.getByTestId('city-label')
+    expect(cityLabel.textContent).toBe(city.label)
+  })
+
+  it('displays city time', () => {
+    setup()
+
+    const cityTime = screen.getByTestId('city-time')
+    expect(cityTime.textContent).toBe(getLocalTime(city.timezone))
+  })
+
+  it('displays city timezone abbreviation', () => {
+    setup()
+
+    const cityTmzAbbrev = screen.getByTestId('city-tmz-abbrev')
+    expect(cityTmzAbbrev.textContent).toBe(city.timezoneAbbreviation)
+  })
+
+  it(`displays time difference between the city's timezone and the base timezone`, () => {
+    setup()
+
+    const cityTimeDiff = screen.getByTestId('city-time-diff')
+    expect(cityTimeDiff.textContent).toBe(
+      formatTimeDifference(getTimeDifference(myCity.timezone, city.timezone), myCity.name)
+    )
+  })
+
+  it('displays delete city button', () => {
+    setup()
+
+    const cityDeleteButton = screen.getByTestId('city-delete-button')
+    expect(cityDeleteButton).toBeInTheDocument()
+  })
+
+  it('opens Delete city confirmation modal after clicking delete button', async () => {
+    render(<App />)
+
+    expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+
+    // Open add modal
+    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+    // Select the 2nd city in the options
+    userEvent.click(screen.getByTestId('timezone-select-field-container'))
+    await screen.findByTestId('timezone-select-menu')
+    userEvent.click(screen.getAllByTestId('timezone-select-option')[1])
+
+    // Save
+    userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    // Wait for modal to be removed
+    await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+    const cityDeleteButton = await screen.findByTestId('city-delete-button')
+    userEvent.click(cityDeleteButton)
+
+    expect(screen.getByTestId('modal')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Delete City' })).toBeInTheDocument()
+  })
+})
+
+describe('Deleting a city', () => {
+  const setup = () => {
+    render(<App />)
+  }
+
+  // describe('Layout', () => {
+  //   it('displays "Delete city" modal header', () => {
+  //     setup()
+  //     const header = screen.getByRole('heading', { name: 'Add City' })
+  //     expect(header).toBeInTheDocument()
+  //   })
+
+  //   it('displays close button', () => {
+  //     setup()
+  //     const closeButton = screen.getByTestId('close-button')
+  //     expect(closeButton).toBeInTheDocument()
+  //   })
+
+  //   it('displays city name input field', () => {
+  //     setup()
+  //     const cityNameField = screen.getByLabelText('Name of city')
+  //     expect(cityNameField).toBeInTheDocument()
+  //   })
+
+  //   it('displays short label input field', () => {
+  //     setup()
+  //     const shortLabel = screen.getByLabelText('Short label')
+  //     expect(shortLabel).toBeInTheDocument()
+  //   })
+
+  //   it('displays save button', () => {
+  //     setup()
+  //     const saveButton = screen.getByRole('button', { name: 'Save' })
+  //     expect(saveButton).toBeInTheDocument()
+  //   })
+  // })
 })

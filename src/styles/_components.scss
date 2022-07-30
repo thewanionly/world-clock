@@ -25,8 +25,6 @@
     width: 50rem;
     background-color: #fff;
     border-radius: 1rem;
-    min-height: 55rem;
-    position: relative;
   }
 
   &__header {
@@ -64,10 +62,8 @@
     transform: rotate(45deg);
   }
 
-  &__footer {
-    position: absolute;
-    bottom: 4rem;
-    left: 3rem;
+  &__body {
+    margin-bottom: 6rem;
   }
 }
 

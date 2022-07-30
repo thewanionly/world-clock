@@ -1,7 +1,7 @@
 import { useRealTimeClock } from '../utilities/hooks'
 import { getTimeDifference, formatTimeDifference } from '../utilities/helpers'
 
-const CityCard = ({ className = '', city, baseCity }) => {
+const CityCard = ({ className = '', city, baseCity, handleShowModal }) => {
   const { name, label, timezone, timezoneAbbreviation } = city || {}
 
   const [time] = useRealTimeClock(timezone)
@@ -19,6 +19,13 @@ const CityCard = ({ className = '', city, baseCity }) => {
           {formatTimeDifference(getTimeDifference(baseCity.timezone, timezone), baseCity.name)}
         </p>
       </div>
+      <button
+        className='city-card__delete-button'
+        data-testid='city-delete-button'
+        onClick={() => handleShowModal('delete')}
+      >
+        Delete
+      </button>
     </div>
   )
 }
