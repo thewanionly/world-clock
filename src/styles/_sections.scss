@@ -2,3 +2,12 @@
   padding: 10rem 0;
   text-align: center;
 }
+
+.cities {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+}

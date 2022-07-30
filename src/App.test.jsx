@@ -34,3 +34,19 @@ describe('My City section', () => {
     expect(myCityTime.textContent).toBe(getLocalTime(myTImeZone))
   })
 })
+
+describe('Cities section', () => {
+  it('displays an empty list by default', () => {
+    setup()
+
+    const cityList = screen.getByTestId('city-list')
+    expect(cityList).toBeEmptyDOMElement()
+  })
+
+  it('displays an enabled "Add city" button', () => {
+    setup()
+
+    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    expect(addCityButton).toBeEnabled()
+  })
+})
