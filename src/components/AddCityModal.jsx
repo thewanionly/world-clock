@@ -1,6 +1,50 @@
 import { memo, useState, useRef } from 'react'
 import Input from './Input'
+import Select from './Select'
 import Modal from './Modal'
+
+const ALLOWED_CITIES = [
+  {
+    label: 'Singapore',
+    value: 'Asia/Singapore'
+  },
+  {
+    label: 'Tokyo',
+    value: 'Asia/Tokyo'
+  },
+  {
+    label: 'Seoul',
+    value: 'Asia/Seoul'
+  },
+  {
+    label: 'Melbourne',
+    value: 'Australia/Melbourne'
+  },
+  {
+    label: 'Sydney',
+    value: 'Australia/Sydney'
+  },
+  {
+    label: 'London',
+    value: 'Europe/London'
+  },
+  {
+    label: 'Paris',
+    value: 'Europe/Paris'
+  },
+  {
+    label: 'Berlin',
+    value: 'Europe/Berlin'
+  },
+  {
+    label: 'New York',
+    value: 'America/New_York'
+  },
+  {
+    label: 'Los Angeles',
+    value: 'America/Los_Angeles'
+  }
+]
 
 const AddCityModal = memo(({ handleClose }) => {
   const formRef = useRef(null)
@@ -20,6 +64,13 @@ const AddCityModal = memo(({ handleClose }) => {
       ...prevFields,
       [name]: value
     }))
+  }
+
+  const handleSelectFieldChange = (name, value) => {
+    setFields((prevFields) => ({
+      ...prevFields,
+      [name]: value
+    }))
 
     if (name && errors[name]) {
       handleErrorChange(name, '')
@@ -27,8 +78,8 @@ const AddCityModal = memo(({ handleClose }) => {
   }
 
   const handleErrorChange = (name, value) => {
-    setErrors((prevFields) => ({
-      ...prevFields,
+    setErrors((prevErrors) => ({
+      ...prevErrors,
       [name]: value
     }))
   }
@@ -50,13 +101,15 @@ const AddCityModal = memo(({ handleClose }) => {
   return (
     <Modal title='Add City' handleClose={handleClose} primaryButton={primaryButton}>
       <form ref={formRef} className='form-group'>
-        <Input
+        <Select
           className='form-input'
           label='Name of city'
+          placeholder='Select a city...'
           id='name'
           name='name'
+          options={ALLOWED_CITIES}
           value={fields.name}
-          onChange={handleFieldChange}
+          onChange={handleSelectFieldChange}
           required
           error={errors.name}
         />

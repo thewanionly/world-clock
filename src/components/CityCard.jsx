@@ -7,7 +7,7 @@ const CityCard = ({ className = '', city, baseCity }) => {
   const [time] = useRealTimeClock(timezone)
 
   return (
-    <div className={`city-card ${className}`}>
+    <div data-testid='city-item' className={`city-card ${className}`}>
       <div className='city-card__description'>
         <h3 data-testid='city-name'>{name}</h3>
         <p data-testid='city-label'>{label}</p>

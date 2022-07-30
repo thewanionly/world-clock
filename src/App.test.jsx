@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 
@@ -10,6 +10,49 @@ const myCity = {
   name: 'Cebu City',
   timezone: 'Asia/Manila'
 }
+
+const ALLOWED_CITIES = [
+  {
+    label: 'Singapore',
+    value: 'Asia/Singapore'
+  },
+  {
+    label: 'Tokyo',
+    value: 'Asia/Tokyo'
+  },
+  {
+    label: 'Seoul',
+    value: 'Asia/Seoul'
+  },
+  {
+    label: 'Melbourne',
+    value: 'Australia/Melbourne'
+  },
+  {
+    label: 'Sydney',
+    value: 'Australia/Sydney'
+  },
+  {
+    label: 'London',
+    value: 'Europe/London'
+  },
+  {
+    label: 'Paris',
+    value: 'Europe/Paris'
+  },
+  {
+    label: 'Berlin',
+    value: 'Europe/Berlin'
+  },
+  {
+    label: 'New York',
+    value: 'America/New_York'
+  },
+  {
+    label: 'Los Angeles',
+    value: 'America/Los_Angeles'
+  }
+]
 
 const setup = () => {
   render(<App />)
@@ -158,6 +201,113 @@ describe('Add modal', () => {
       expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
     })
 
+    it('shows only the allowed cities in the city name options', async () => {
+      setup()
+
+      userEvent.click(screen.getByTestId('name-select-field-container'))
+      await screen.findByTestId('name-select-menu')
+
+      const options = screen.getAllByTestId('name-select-option')
+
+      expect(options.length).toBe(ALLOWED_CITIES.length)
+
+      options.forEach((option, index) => {
+        expect(option.textContent).toBe(ALLOWED_CITIES[index].label)
+      })
+    })
+
+    it(`should show validation error when saving the form without a selected city name`, () => {
+      setup()
+
+      userEvent.clear(screen.getByLabelText('Name of city'))
+
+      const saveButton = screen.getByRole('button', { name: 'Save' })
+      userEvent.click(saveButton)
+
+      expect(screen.getByText('Please select a city name')).toBeInTheDocument()
+    })
+
+    it(`hides validation error when user already selected a city name`, async () => {
+      setup()
+
+      userEvent.clear(screen.getByLabelText('Name of city'))
+
+      const saveButton = screen.getByRole('button', { name: 'Save' })
+      userEvent.click(saveButton)
+
+      userEvent.click(screen.getByTestId('name-select-field-container'))
+      await screen.findByTestId('name-select-menu')
+      userEvent.click(screen.getAllByTestId('name-select-option')[0])
+
+      expect(screen.queryByText('Please select a city name')).not.toBeInTheDocument()
+    })
+
+    xit('can add a new city without description', async () => {
+      setup()
+
+      const closeButton = screen.getByTestId('close-button')
+      userEvent.click(closeButton)
+
+      // Check the existing cities
+      const existingCities = screen.getAllByTestId('city-item')
+      console.log(existingCities)
+      // existingCities.forEach((cityItem, index) => {
+      //   expect(cityItem.textContent).toBe(ALLOWED_CITIES[index].label)
+      // })
+
+      // expect(screen.getAllByTestId('city-item').length).toBe(0)
+
+      // // Open modal
+      // setup()
+
+      // // Select the first city
+      // userEvent.click(screen.getByTestId('name-select-field-container'))
+      // await screen.findByTestId('name-select-menu')
+
+      // const selectedCity = screen.getAllByTestId('name-select-option')[0]
+      // userEvent.click(selectedCity)
+
+      // // Save
+      // userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // // Wait for modal to be removed
+      // await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      // // Get all cities
+      // const cityItems = screen.getAllByTestId('city-item')
+
+      // // Expect the selected city to be in the cities list
+      // expect(cityItems.length).toBe(existingCitiesLength + 1)
+      // expect(cityItems[cityItems.length - 1].textContent).toBe(selectedCity.textContent)
+    })
+
+    xit('does not include the already added cities in the city name options', async () => {
+      setup()
+
+      // Select the first city
+      userEvent.click(screen.getByTestId('name-select-field-container'))
+      await screen.findByTestId('name-select-menu')
+      userEvent.click(screen.getAllByTestId('name-select-option')[0])
+
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      // Open the modal again
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Open select city dropdown
+      userEvent.click(screen.getByTestId('name-select-field-container'))
+      await screen.findByTestId('name-select-menu')
+      const options = screen.getAllByTestId('name-select-option')
+
+      // Expect the first city not to be in the dropdown
+      expect(options.length).toBe(ALLOWED_CITIES.length - 1)
+      expect(options[0].textContent).toBe(ALLOWED_CITIES[1].label)
+    })
+
     it(`cannot input more than 20 characters in Short label field`, () => {
       setup()
 
@@ -169,28 +319,8 @@ describe('Add modal', () => {
       expect(screen.getByLabelText('Short label')).toHaveValue(allowedText)
     })
 
-    it(`should show validation error when saving the form without a city name value`, () => {
+    xit('can add a new city with description', async () => {
       setup()
-
-      userEvent.clear(screen.getByLabelText('Name of city'))
-
-      const saveButton = screen.getByRole('button', { name: 'Save' })
-      userEvent.click(saveButton)
-
-      expect(screen.getByText('Please select a city name')).toBeInTheDocument()
-    })
-
-    it(`hides validation error when user starts typing on the city name field`, () => {
-      setup()
-
-      userEvent.clear(screen.getByLabelText('Name of city'))
-
-      const saveButton = screen.getByRole('button', { name: 'Save' })
-      userEvent.click(saveButton)
-
-      userEvent.type(screen.getByLabelText('Name of city'), 'test')
-
-      expect(screen.queryByText('Please select a city name')).not.toBeInTheDocument()
     })
   })
 })
