@@ -9,7 +9,8 @@ import Cities from './components/Cities'
 
 const myCity = {
   name: 'Cebu City',
-  timezone: 'Asia/Manila'
+  timezone: 'Asia/Manila',
+  timezoneAbbrevation: 'PST'
 }
 
 const ALLOWED_CITIES = [
@@ -72,6 +73,13 @@ describe('My City section', () => {
 
     const myCityTime = screen.getByTestId('my-city-time')
     expect(myCityTime.textContent).toBe(getLocalTime(myCity.timezone))
+  })
+
+  it(`displays my city's timezone`, () => {
+    setup()
+
+    const myCityTimeZone = screen.getByTestId('my-city-tmz-abbrev')
+    expect(myCityTimeZone.textContent).toBe(myCity.timezoneAbbrevation)
   })
 })
 

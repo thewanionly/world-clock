@@ -11,7 +11,8 @@ const DeleteCityModal = memo(({ data, setCities, handleClose }) => {
 
   const primaryButton = {
     label: 'Delete',
-    handler: handleDelete
+    handler: handleDelete,
+    isDanger: true
   }
 
   const secondaryButton = {

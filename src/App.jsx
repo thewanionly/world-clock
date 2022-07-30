@@ -9,7 +9,8 @@ import Cities from './components/Cities'
 const App = () => {
   const myCity = {
     name: 'Cebu City',
-    timezone: 'Asia/Manila'
+    timezone: 'Asia/Manila',
+    timezoneAbbrevation: 'PST'
   }
 
   const [myLocalTime] = useRealTimeClock(myCity.timezone)
@@ -40,6 +41,7 @@ const App = () => {
         <div className='container'>
           <h3 data-testid='my-city-name'>{myCity.name}</h3>
           <h1 data-testid='my-city-time'>{myLocalTime}</h1>
+          <h4 data-testid='my-city-tmz-abbrev'>{myCity.timezoneAbbrevation}</h4>
         </div>
       </section>
       <Cities baseCity={myCity} cities={cities} handleShowModal={handleShowModal} />

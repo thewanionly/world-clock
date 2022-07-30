@@ -1,11 +1,47 @@
 .city-card {
-  padding: 2rem 3rem;
-  border: 1px solid black;
-  text-align: center;
+  padding: 3rem;
+  border-radius: 0.5rem;
+  background-color: var(--white-color);
+  border-top-width: 0.6rem;
+  border-top-style: solid;
 
-  display: flex;
-  flex-direction: column;
-  gap: 7rem;
+  display: grid;
+  grid-template-rows: 8rem 9rem min-content min-content;
+  gap: 3rem;
+
+  &__label {
+    margin-top: 0.8rem;
+  }
+
+  &__timezone-text {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.3rem;
+  }
+
+  &__tmz-abbrev {
+    margin-bottom: 0.8rem;
+  }
+
+  &__delete-button {
+    width: min-content;
+  }
+
+  &.border-top-orange {
+    border-top-color: var(--orange-color);
+  }
+
+  &.border-top-purple {
+    border-top-color: var(--purple-color);
+  }
+
+  &.border-top-sky-blue {
+    border-top-color: var(--sky-blue-color);
+  }
+
+  &.border-top-dark-blue {
+    border-top-color: var(--secondary-color);
+  }
 }
 
 .modal {
@@ -14,7 +50,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--overlay-bg-color);
   transition: all 0.2s;
 
   display: flex;
@@ -24,7 +60,7 @@
   &__content {
     padding: 3rem;
     width: 50rem;
-    background-color: #fff;
+    background-color: var(--white-color);
     border-radius: 1rem;
   }
 
@@ -47,7 +83,7 @@
   &__close-button::before,
   &__close-button::after {
     display: block;
-    background: #000;
+    background: var(--black-color);
     content: '';
     height: 0.2rem;
     width: 2rem;
@@ -94,16 +130,16 @@
     margin-top: 1.6rem;
 
     padding: 1.3rem 2.4rem;
-    background-color: #f7f8fd;
+    background-color: var(--body-bg-color);
     border-radius: 5px;
     border: 1px solid transparent;
 
     &:focus-within {
-      border-color: #4661e6;
+      border-color: var(--primary-color);
     }
 
     &.has-error {
-      border-color: #d73737;
+      border-color: var(--danger-color);
     }
   }
 
@@ -114,7 +150,7 @@
 
   &__error {
     margin-top: 0.5rem;
-    color: #d73737;
+    color: var(--danger-color);
   }
 }
 
@@ -137,16 +173,16 @@
     margin-top: 1.6rem;
 
     padding: 1.3rem 2.4rem;
-    background-color: #f7f8fd;
+    background-color: var(--body-bg-color);
     border-radius: 5px;
     border: 1px solid transparent;
 
     &.is-focused {
-      border-color: #4661e6;
+      border-color: var(--primary-color);
     }
 
     &.has-error {
-      border-color: #d73737;
+      border-color: var(--danger-color);
     }
   }
 
@@ -165,9 +201,9 @@
 
     z-index: 2;
     width: 100%;
-    max-height: 272px;
+    max-height: 255px;
     overflow: auto;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 1.5rem 2.5rem;
     border-radius: 1rem;
     box-shadow: 0px 10px 40px -7px rgba(55, 63, 104, 0.35);
@@ -183,16 +219,57 @@
     padding: 1.2rem 0;
 
     &:not(:last-of-type) {
-      border-bottom: 1px solid rgba(#3a4374, 0.15);
+      border-bottom: 1px solid var(--secondary-lighter-color);
     }
 
     &:hover {
-      color: #4661e6;
+      color: var(--primary-color);
     }
   }
 
   &__error {
     margin-top: 0.5rem;
-    color: #d73737;
+    color: var(--danger-color);
+  }
+}
+
+.button {
+  cursor: pointer;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 1rem;
+  min-width: 10rem;
+
+  /** TYPES **/
+  &__primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+
+    &:hover {
+      background-color: var(--primary-light-color);
+    }
+  }
+
+  &__secondary {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+
+    &:hover {
+      background-color: var(--secondary-light-color);
+    }
+  }
+
+  &__danger {
+    background-color: var(--danger-color);
+    color: var(--white-color);
+
+    &:hover {
+      background-color: var(--danger-light-color);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }

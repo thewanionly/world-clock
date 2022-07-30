@@ -22,7 +22,8 @@ const Select = ({
     setIsOptionsOpen(false)
   }
 
-  const handleSelectOption = (value) => {
+  const handleSelectOption = (e, value) => {
+    e.stopPropagation()
     onChange(name, value)
     handleCloseOptions()
   }
@@ -38,12 +39,9 @@ const Select = ({
         className={`select__container ${error ? 'has-error' : ''} ${
           isOptionsOpen ? 'is-focused' : ''
         }`}
+        onClick={handleToggleOptions}
       >
-        <div
-          data-testid={`${id}-select-field-container`}
-          className='select__field-container'
-          onClick={handleToggleOptions}
-        >
+        <div data-testid={`${id}-select-field-container`} className='select__field-container'>
           <input
             data-testid={`${id}-select-field`}
             className='select__field'
@@ -64,7 +62,7 @@ const Select = ({
               data-testid={`${id}-select-option`}
               className='select__option'
               key={value}
-              onClick={() => handleSelectOption(value)}
+              onClick={(e) => handleSelectOption(e, value)}
             >
               {label}
             </div>

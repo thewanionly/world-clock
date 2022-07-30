@@ -9,19 +9,20 @@
   &__container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 5rem;
     align-items: flex-start;
   }
 
   &__city-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max(22%, 25rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(max(22%, 27rem), 1fr));
     justify-items: center;
-    grid-gap: 2rem;
+    column-gap: 2.2rem;
+    row-gap: 5rem;
     width: 100%;
   }
 
   &__city-item {
-    width: 25rem;
+    width: 27rem;
   }
 }
