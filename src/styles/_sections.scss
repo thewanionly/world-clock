@@ -30,13 +30,6 @@
 .cities {
   padding-bottom: 5rem;
 
-  &__container {
-    display: flex;
-    flex-direction: column;
-    gap: 5rem;
-    align-items: flex-start;
-  }
-
   &__city-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(max(22%, 27rem), 1fr));
@@ -47,5 +40,18 @@
 
   &__city-item {
     width: 27rem;
+  }
+
+  &__empty-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 55%;
+      height: 55%;
+      min-width: 27rem;
+    }
   }
 }
