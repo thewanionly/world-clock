@@ -1,6 +1,7 @@
-import { useRealTimeClock } from '../utilities/hooks'
 import { getTimeDifference, formatTimeDifference } from '../utilities/helpers'
+
 import Button from './Button'
+import Clock from './Clock'
 
 const AREA_COLORS = {
   Asia: 'dark-blue',
@@ -11,8 +12,6 @@ const AREA_COLORS = {
 
 const CityCard = ({ className = '', city, baseCity, handleShowModal }) => {
   const { name, label, timezone, timezoneAbbreviation } = city || {}
-
-  const [time] = useRealTimeClock(timezone)
 
   const borderTopColor = AREA_COLORS[timezone.split('/')[0]]
 
@@ -28,9 +27,12 @@ const CityCard = ({ className = '', city, baseCity, handleShowModal }) => {
       </div>
       <div className='city-card__timezone'>
         <div className='city-card__timezone-text'>
-          <h2 className='city-card__time' data-testid='city-time'>
-            {time}
-          </h2>
+          <Clock
+            className='city-card__time'
+            dataTestId='city-time'
+            timezone={timezone}
+            size='medium'
+          />
           <h4 className='city-card__tmz-abbrev' data-testid='city-tmz-abbrev'>
             {timezoneAbbreviation}
           </h4>
