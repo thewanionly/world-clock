@@ -1,6 +1,11 @@
+import { useContext } from 'react'
+
+import StoreContext from '../store/storeContext'
 import Button from './Button'
 
 const Modal = ({ title, handleClose, primaryButton, secondaryButton, children }) => {
+  const { isModalSaving } = useContext(StoreContext)
+
   return (
     <div className='modal' data-testid='modal'>
       <div className='modal__content'>
@@ -21,8 +26,11 @@ const Modal = ({ title, handleClose, primaryButton, secondaryButton, children })
                 primaryButton.isDanger ? 'button__danger' : 'button__primary'
               }`}
               onClick={primaryButton.handler}
+              disabled={isModalSaving}
             >
-              {primaryButton.label}
+              {!isModalSaving
+                ? primaryButton.label
+                : primaryButton.labelLoading || primaryButton.label}
             </Button>
           )}
           {secondaryButton && (
@@ -30,8 +38,9 @@ const Modal = ({ title, handleClose, primaryButton, secondaryButton, children })
               dataTestId='modal-secondary-button'
               className='modal__secondary-button button__secondary'
               onClick={secondaryButton.handler}
+              disabled={isModalSaving}
             >
-              {secondaryButton.label}
+              {!isModalSaving ? secondaryButton.label : secondaryButton.labelLoading}
             </Button>
           )}
         </div>

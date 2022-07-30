@@ -5,6 +5,7 @@ import StoreContext from './storeContext'
 const StoreProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false)
   const [cities, setCities] = useState([])
+  const [isModalSaving, setIsModalSaving] = useState(false)
 
   const handleShowModal = (modalType, modalData) => {
     setShowModal({ type: modalType, data: modalData })
@@ -16,7 +17,15 @@ const StoreProvider = ({ children }) => {
 
   return (
     <StoreContext.Provider
-      value={{ cities, setCities, showModal, handleShowModal, handleClose: handleCloseModal }}
+      value={{
+        cities,
+        setCities,
+        showModal,
+        handleShowModal,
+        handleClose: handleCloseModal,
+        isModalSaving,
+        setIsModalSaving
+      }}
     >
       {children}
     </StoreContext.Provider>

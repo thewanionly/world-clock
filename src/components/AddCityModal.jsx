@@ -8,7 +8,7 @@ import Modal from './Modal'
 
 const AddCityModal = memo(() => {
   const formRef = useRef(null)
-  const { cities, setCities, handleClose } = useContext(StoreContext)
+  const { cities, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
 
   const [fields, setFields] = useState({
     timezone: '',
@@ -18,8 +18,6 @@ const AddCityModal = memo(() => {
     timezone: '',
     label: ''
   })
-
-  const [isSaving, setIsSaving] = useState(false)
 
   const validCityOptions = ALLOWED_CITIES.filter(
     ({ value }) => !cities.length || !cities.some(({ timezone }) => timezone === value)
@@ -56,7 +54,7 @@ const AddCityModal = memo(() => {
     if (formRef.current.checkValidity()) {
       try {
         // Set isLoading to true
-        setIsSaving(true)
+        setIsModalSaving(true)
 
         const response = await fetch(`${API_URL}/${fields.timezone}`)
         const data = await response.json()
@@ -75,7 +73,7 @@ const AddCityModal = memo(() => {
         ])
 
         // Set isLoading to false
-        setIsSaving(false)
+        setIsModalSaving(false)
 
         // Close modal
         handleClose()
@@ -83,7 +81,7 @@ const AddCityModal = memo(() => {
         console.error(error)
 
         // Set isLoading to false
-        setIsSaving(false)
+        setIsModalSaving(false)
       }
     } else {
       formRef.current.reportValidity()
@@ -93,6 +91,7 @@ const AddCityModal = memo(() => {
 
   const primaryButton = {
     label: 'Save',
+    labelLoading: 'Saving...',
     handler: handleSave
   }
 
