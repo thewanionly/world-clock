@@ -1,19 +1,13 @@
 import { useCallback, useState } from 'react'
 
-import { useRealTimeClock } from './utilities/hooks'
+import { myCity } from './utilities/constants'
 
 import AddCityModal from './components/AddCityModal'
 import DeleteCityModal from './components/DeleteCityModal'
+import Header from './components/Header'
 import Cities from './components/Cities'
 
 const App = () => {
-  const myCity = {
-    name: 'Cebu City',
-    timezone: 'Asia/Manila',
-    timezoneAbbrevation: 'PST'
-  }
-
-  const [myLocalTime] = useRealTimeClock(myCity.timezone)
   const [showModal, setShowModal] = useState(false)
   const [cities, setCities] = useState([])
 
@@ -37,13 +31,7 @@ const App = () => {
           handleClose={handleCloseModal}
         />
       )}
-      <section className='my-city'>
-        <div className='container'>
-          <h3 data-testid='my-city-name'>{myCity.name}</h3>
-          <h1 data-testid='my-city-time'>{myLocalTime}</h1>
-          <h4 data-testid='my-city-tmz-abbrev'>{myCity.timezoneAbbrevation}</h4>
-        </div>
-      </section>
+      <Header />
       <Cities baseCity={myCity} cities={cities} handleShowModal={handleShowModal} />
     </div>
   )

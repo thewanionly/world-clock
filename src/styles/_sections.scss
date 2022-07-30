@@ -1,6 +1,24 @@
+.header {
+  padding: 7rem 0;
+
+  &__container {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+    border-radius: 1rem;
+    padding: 2.7rem;
+  }
+}
+
 .my-city {
-  padding: 10rem 0;
-  text-align: center;
+  &__timezone {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.3rem;
+  }
+
+  &__tmz-abbrev {
+    margin-bottom: 1.3rem;
+  }
 }
 
 .cities {
