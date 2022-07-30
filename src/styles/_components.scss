@@ -24,6 +24,9 @@
     padding: 3rem;
     width: 50rem;
     background-color: #fff;
+    border-radius: 1rem;
+    min-height: 55rem;
+    position: relative;
   }
 
   &__header {
@@ -61,7 +64,54 @@
     transform: rotate(45deg);
   }
 
-  &__body {
-    margin-bottom: 5rem;
+  &__footer {
+    position: absolute;
+    bottom: 4rem;
+    left: 3rem;
+  }
+}
+
+.form-input:not(:first-of-type) {
+  margin-top: 4rem;
+}
+
+.input {
+  &__label {
+    font-weight: 700;
+  }
+
+  &__required-indicator {
+    margin-left: 0.5rem;
+  }
+
+  &__description {
+    margin-top: 0.5rem;
+  }
+
+  &__container {
+    margin-top: 1.6rem;
+
+    padding: 1.3rem 2.4rem;
+    background-color: #f7f8fd;
+    border-radius: 5px;
+    border: 1px solid transparent;
+
+    &:focus-within {
+      border-color: #4661e6;
+    }
+
+    &.has-error {
+      border-color: #d73737;
+    }
+  }
+
+  &__field {
+    all: unset;
+    width: 100%;
+  }
+
+  &__error {
+    margin-top: 0.5rem;
+    color: #d73737;
   }
 }

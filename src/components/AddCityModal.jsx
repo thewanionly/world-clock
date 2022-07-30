@@ -1,4 +1,5 @@
 import { memo, useState, useRef } from 'react'
+import Input from './Input'
 import Modal from './Modal'
 
 const AddCityModal = memo(({ handleClose }) => {
@@ -48,30 +49,29 @@ const AddCityModal = memo(({ handleClose }) => {
 
   return (
     <Modal title='Add City' handleClose={handleClose} primaryButton={primaryButton}>
-      <form ref={formRef}>
-        <div>
-          <label htmlFor='name'>Name of city</label>
-          <input
-            id='name'
-            type='text'
-            name='name'
-            value={fields.name}
-            onChange={handleFieldChange}
-            required
-          />
-          {errors.name && <span>{errors.name}</span>}
-        </div>
-        <div>
-          <label htmlFor='label'>Short label</label>
-          <textarea
-            id='label'
-            name='label'
-            maxLength='20'
-            value={fields.label}
-            onChange={handleFieldChange}
-          />
-          {errors.label && <span>{errors.label}</span>}
-        </div>
+      <form ref={formRef} className='form-group'>
+        <Input
+          className='form-input'
+          label='Name of city'
+          id='name'
+          name='name'
+          value={fields.name}
+          onChange={handleFieldChange}
+          required
+          error={errors.name}
+        />
+        <Input
+          className='form-input'
+          label='Short label'
+          description='Add a short label (up to 20 characters)'
+          id='label'
+          name='label'
+          type='textarea'
+          maxLength='20'
+          value={fields.label}
+          onChange={handleFieldChange}
+          error={errors.label}
+        />
       </form>
     </Modal>
   )
