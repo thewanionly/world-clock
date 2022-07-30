@@ -22,7 +22,7 @@ const CityCard = ({ className = '', city, baseCity, handleShowModal }) => {
       <button
         className='city-card__delete-button'
         data-testid='city-delete-button'
-        onClick={() => handleShowModal('delete')}
+        onClick={() => handleShowModal('delete', city)}
       >
         Delete
       </button>

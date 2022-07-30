@@ -16,8 +16,8 @@ const App = () => {
   const [showModal, setShowModal] = useState(false)
   const [cities, setCities] = useState([])
 
-  const handleShowModal = (modalType) => {
-    setShowModal(modalType)
+  const handleShowModal = (modalType, modalData) => {
+    setShowModal({ type: modalType, data: modalData })
   }
 
   const handleCloseModal = useCallback(() => {
@@ -26,10 +26,16 @@ const App = () => {
 
   return (
     <div className='app'>
-      {showModal === 'add' && (
+      {showModal.type === 'add' && (
         <AddCityModal cities={cities} setCities={setCities} handleClose={handleCloseModal} />
       )}
-      {showModal === 'delete' && <DeleteCityModal handleClose={handleCloseModal} />}
+      {showModal.type === 'delete' && (
+        <DeleteCityModal
+          data={showModal.data}
+          setCities={setCities}
+          handleClose={handleCloseModal}
+        />
+      )}
       <section className='my-city'>
         <div className='container'>
           <h3 data-testid='my-city-name'>{myCity.name}</h3>

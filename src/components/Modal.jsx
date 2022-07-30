@@ -13,12 +13,20 @@ const Modal = ({ title, handleClose, primaryButton, secondaryButton, children })
         <div className='modal__body'>{children}</div>
         <div className='modal__footer'>
           {primaryButton && (
-            <button className='modal__primary-button' onClick={primaryButton.handler}>
+            <button
+              data-testid='modal-primary-button'
+              className='modal__primary-button'
+              onClick={primaryButton.handler}
+            >
               {primaryButton.label}
             </button>
           )}
           {secondaryButton && (
-            <button className='modal__secondary-button' onClick={secondaryButton.handler}>
+            <button
+              data-testid='modal-secondary-button'
+              className='modal__secondary-button'
+              onClick={secondaryButton.handler}
+            >
               {secondaryButton.label}
             </button>
           )}

@@ -180,7 +180,7 @@ describe('Addding a city', () => {
   })
 
   describe('Interaction', () => {
-    it('can close modal', () => {
+    it('can close modal through "X" button', () => {
       setup()
       const closeButton = screen.getByTestId('close-button')
       userEvent.click(closeButton)
@@ -461,39 +461,199 @@ describe('City Card component', () => {
 })
 
 describe('Deleting a city', () => {
-  const setup = () => {
+  const setup = async () => {
     render(<App />)
+
+    // Open add modal
+    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+    // Select the 2nd city in the options
+    userEvent.click(screen.getByTestId('timezone-select-field-container'))
+    await screen.findByTestId('timezone-select-menu')
+    userEvent.click(screen.getAllByTestId('timezone-select-option')[1])
+
+    // Save
+    userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    // Wait for modal to be removed
+    await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+    const cityDeleteButton = await screen.findByTestId('city-delete-button')
+    userEvent.click(cityDeleteButton)
   }
 
-  // describe('Layout', () => {
-  //   it('displays "Delete city" modal header', () => {
-  //     setup()
-  //     const header = screen.getByRole('heading', { name: 'Add City' })
-  //     expect(header).toBeInTheDocument()
-  //   })
+  describe('Layout', () => {
+    it('displays "Delete city" modal header', async () => {
+      await setup()
+      const header = screen.getByRole('heading', { name: 'Delete City' })
+      expect(header).toBeInTheDocument()
+    })
 
-  //   it('displays close button', () => {
-  //     setup()
-  //     const closeButton = screen.getByTestId('close-button')
-  //     expect(closeButton).toBeInTheDocument()
-  //   })
+    it('displays close button', async () => {
+      await setup()
+      const closeButton = screen.getByTestId('close-button')
+      expect(closeButton).toBeInTheDocument()
+    })
 
-  //   it('displays city name input field', () => {
-  //     setup()
-  //     const cityNameField = screen.getByLabelText('Name of city')
-  //     expect(cityNameField).toBeInTheDocument()
-  //   })
+    it('displays a delete confirmation message', async () => {
+      await setup()
+      const confirmationMessage = screen.getByText(
+        'Are you sure you want to delete this city from the list?'
+      )
+      expect(confirmationMessage).toBeInTheDocument()
+    })
 
-  //   it('displays short label input field', () => {
-  //     setup()
-  //     const shortLabel = screen.getByLabelText('Short label')
-  //     expect(shortLabel).toBeInTheDocument()
-  //   })
+    it('displays Delete button', async () => {
+      await setup()
+      const deleteButton = screen.getByTestId('modal-primary-button')
+      expect(deleteButton).toBeInTheDocument()
+    })
 
-  //   it('displays save button', () => {
-  //     setup()
-  //     const saveButton = screen.getByRole('button', { name: 'Save' })
-  //     expect(saveButton).toBeInTheDocument()
-  //   })
-  // })
+    it('displays Cancel button', async () => {
+      await setup()
+      const cancelButton = screen.getByTestId('modal-secondary-button')
+      expect(cancelButton).toBeInTheDocument()
+    })
+  })
+
+  describe('Interaction', () => {
+    it('can close modal through "X" button', async () => {
+      await setup()
+      const closeButton = screen.getByTestId('close-button')
+      userEvent.click(closeButton)
+
+      expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+    })
+
+    it('closes the modal when Cancel button is clicked', async () => {
+      await setup()
+      const cancelButton = screen.getByTestId('modal-secondary-button')
+      userEvent.click(cancelButton)
+
+      expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+    })
+
+    it('deletes the city from the list when Delete button is clicked', async () => {
+      render(<App />)
+
+      // Open add modal
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Select the 1st city in the options
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[0])
+
+      // Add a short label
+      userEvent.type(screen.getByLabelText('Short label'), 'nice city')
+
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      // Open add modal again
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Select the 1st city in the options (2nd city in the ALLOWED_CITIES array)
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[0])
+
+      // Add a short label
+      userEvent.type(screen.getByLabelText('Short label'), 'peaceful city')
+
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      const cityCardDeleteButtons = await screen.findAllByTestId('city-delete-button')
+
+      // Click the delete button on the 2nd city card
+      userEvent.click(cityCardDeleteButtons[1])
+
+      // Delete the city (2nd city)
+      const deleteButton = screen.getByTestId('modal-primary-button')
+      userEvent.click(deleteButton)
+
+      // Expected data of the 2nd city
+      const expectedOutput = {
+        name: ALLOWED_CITIES[1].value.split('/')[1].replace('_', ' '),
+        label: 'peaceful city',
+        timezone: ALLOWED_CITIES[1].value,
+        timezoneAbbreviation: 'JST'
+      }
+
+      // Expect the selected city not to be in the cities list
+      expect(screen.queryByTestId('city-name').textContent).not.toBe(expectedOutput.name)
+      expect(screen.queryByTestId('city-label').textContent).not.toBe(expectedOutput.label)
+      expect(screen.queryByTestId('city-time').textContent).not.toBe(
+        getLocalTime(expectedOutput.timezone)
+      )
+      expect(screen.queryByTestId('city-tmz-abbrev').textContent).not.toBe(
+        expectedOutput.timezoneAbbreviation
+      )
+      expect(screen.queryByTestId('city-time-diff').textContent).not.toBe(
+        formatTimeDifference(
+          getTimeDifference(myCity.timezone, expectedOutput.timezone),
+          myCity.name
+        )
+      )
+    })
+
+    it('shows the city back in the Add city options after deleting the city from the list', async () => {
+      render(<App />)
+
+      // Open add modal
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Select the 1st city in the options
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[0])
+
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      // Open add modal again
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Open select city dropdown
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      const optionsBefore = screen.getAllByTestId('timezone-select-option')
+
+      // Expect the 1st city not to be in the dropdown
+      expect(optionsBefore.length).toBe(ALLOWED_CITIES.length - 1)
+      expect(optionsBefore[0].textContent).toBe(ALLOWED_CITIES[1].label)
+
+      // Close modal
+      userEvent.click(screen.getByTestId('close-button'))
+
+      // Click the delete button on the 1st city card
+      userEvent.click(await screen.findByTestId('city-delete-button'))
+
+      // Delete the 1st city
+      const deleteButton = screen.getByTestId('modal-primary-button')
+      userEvent.click(deleteButton)
+
+      // Open add modal again
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Open select city dropdown
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      const optionsAfter = screen.getAllByTestId('timezone-select-option')
+
+      // Expect the 1st city to be back in the dropdown
+      expect(optionsAfter.length).toBe(ALLOWED_CITIES.length)
+      expect(optionsAfter[0].textContent).toBe(ALLOWED_CITIES[0].label)
+    })
+  })
 })
