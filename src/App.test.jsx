@@ -81,15 +81,6 @@ describe('My City section', () => {
     const myCityTimeZone = screen.getByTestId('my-city-tmz-abbrev')
     expect(myCityTimeZone.textContent).toBe(myCity.timezoneAbbrevation)
   })
-})
-
-describe('Cities section', () => {
-  it('displays an empty list by default', () => {
-    setup()
-
-    const cityList = screen.queryAllByTestId('city-item')
-    expect(cityList.length).toBe(0)
-  })
 
   it('displays an enabled "Add city" button', () => {
     setup()
@@ -110,40 +101,14 @@ describe('Cities section', () => {
     expect(screen.getByTestId('modal')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Add City' })).toBeInTheDocument()
   })
+})
 
-  it('disabled "Add city" button when there are already 4 cities in the list', () => {
-    render(
-      <Cities
-        baseCity={myCity}
-        cities={[
-          {
-            name: 'London',
-            label: 'Nice city',
-            timezone: 'Europe/London',
-            timezoneAbbreviation: 'BST'
-          },
-          {
-            name: 'Tokyo',
-            label: 'Busy city',
-            timezone: 'Asia/Tokyo',
-            timezoneAbbreviation: 'JST'
-          },
-          {
-            name: 'New York',
-            timezone: 'America/New_York',
-            timezoneAbbreviation: 'AEST'
-          },
-          {
-            name: 'Sydney',
-            timezone: 'Australia/Sydney',
-            timezoneAbbreviation: 'EDT'
-          }
-        ]}
-      />
-    )
+describe('Cities section', () => {
+  it('displays an empty list by default', () => {
+    setup()
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
-    expect(addCityButton).toBeDisabled()
+    const cityList = screen.queryAllByTestId('city-item')
+    expect(cityList.length).toBe(0)
   })
 })
 
@@ -380,6 +345,30 @@ describe('Addding a city', () => {
       userEvent.type(screen.getByLabelText('Short label'), inputText)
 
       expect(screen.getByLabelText('Short label')).toHaveValue(allowedText)
+    })
+
+    it('disabled "Add city" button when there are already 4 cities in the list', async () => {
+      render(<App />)
+
+      // Add city four times
+      for (let i = 0; i < 4; i++) {
+        // Open modal
+        userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+        // Select the 2nd city in the options
+        userEvent.click(screen.getByTestId('timezone-select-field-container'))
+        await screen.findByTestId('timezone-select-menu')
+        userEvent.click(screen.getAllByTestId('timezone-select-option')[1])
+
+        // Save
+        userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+        // Wait for modal to be removed
+        await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      }
+
+      const addCityButton = screen.getByRole('button', { name: 'Add city' })
+      expect(addCityButton).toBeDisabled()
     })
   })
 })

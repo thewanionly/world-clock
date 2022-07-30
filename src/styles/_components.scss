@@ -1,4 +1,5 @@
 .city-card {
+  justify-self: center;
   padding: 3rem;
   border-radius: 0.5rem;
   background-color: var(--white-color);
@@ -32,7 +33,7 @@
   }
 
   &.border-top-purple {
-    border-top-color: var(--purple-color);
+    border-top-color: var(--tertiary-color);
   }
 
   &.border-top-sky-blue {
@@ -135,7 +136,7 @@
     border: 1px solid transparent;
 
     &:focus-within {
-      border-color: var(--primary-color);
+      border-color: var(--tertiary-color);
     }
 
     &.has-error {
@@ -178,7 +179,7 @@
     border: 1px solid transparent;
 
     &.is-focused {
-      border-color: var(--primary-color);
+      border-color: var(--tertiary-color);
     }
 
     &.has-error {
@@ -256,6 +257,15 @@
 
     &:hover {
       background-color: var(--secondary-light-color);
+    }
+  }
+
+  &__tertiary {
+    background-color: var(--tertiary-color);
+    color: var(--white-color);
+
+    &:hover {
+      background-color: var(--tertiary-light-color);
     }
   }
 

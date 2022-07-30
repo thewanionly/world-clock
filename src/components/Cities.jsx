@@ -5,13 +5,6 @@ const Cities = ({ baseCity, cities = [], handleShowModal }) => {
   return (
     <section className='cities'>
       <div className='container cities__container'>
-        <Button
-          className='cities__add-button button__primary'
-          onClick={() => handleShowModal('add')}
-          disabled={cities.length >= 4}
-        >
-          Add city
-        </Button>
         <div className='cities__city-list' data-testid='city-list'>
           {cities.map((city) => (
             <CityCard

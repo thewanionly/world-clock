@@ -6,6 +6,12 @@
     color: var(--white-color);
     border-radius: 1rem;
     padding: 2.7rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -33,8 +39,7 @@
 
   &__city-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max(22%, 27rem), 1fr));
-    justify-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(max(22%, 27rem), 1fr));
     column-gap: 2.2rem;
     row-gap: 5rem;
     width: 100%;

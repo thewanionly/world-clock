@@ -31,7 +31,7 @@ const App = () => {
           handleClose={handleCloseModal}
         />
       )}
-      <Header />
+      <Header cities={cities} handleShowModal={handleShowModal} />
       <Cities baseCity={myCity} cities={cities} handleShowModal={handleShowModal} />
     </div>
   )

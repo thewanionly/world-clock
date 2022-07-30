@@ -1,8 +1,10 @@
 :root {
-  --primary-color: #4661e6;
-  --primary-light-color: #7c91f9;
+  --primary-color: #ad1fea;
+  --primary-light-color: #c75af6;
   --secondary-color: #373f68;
   --secondary-light-color: #656ea3;
+  --tertiary-color: #4661e6;
+  --tertiary-light-color: #7c91f9;
   --secondary-lighter-color: #{rgba(#3a4374, 0.15)};
   --danger-color: #d73737;
   --danger-light-color: #e98888;
@@ -15,7 +17,6 @@
 
   --orange-color: #f49f85;
   --sky-blue-color: #62bcfa;
-  --purple-color: #ad1fea;
 }
 
 *,

@@ -1,7 +1,8 @@
 import { myCity } from '../utilities/constants'
 import { useRealTimeClock } from '../utilities/hooks'
+import Button from './Button'
 
-const Header = () => {
+const Header = ({ cities, handleShowModal }) => {
   const [myLocalTime] = useRealTimeClock(myCity.timezone)
 
   return (
@@ -19,6 +20,15 @@ const Header = () => {
               {myCity.timezoneAbbrevation}
             </h4>
           </div>
+        </div>
+        <div className='header__right'>
+          <Button
+            className='cities__add-button button__primary'
+            onClick={() => handleShowModal('add')}
+            disabled={cities.length >= 4}
+          >
+            Add city
+          </Button>
         </div>
       </div>
     </section>
