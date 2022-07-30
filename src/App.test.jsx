@@ -478,8 +478,9 @@ describe('Deleting a city', () => {
 
     it('displays a delete confirmation message', async () => {
       await setup()
+      const cityName = 'Tokyo' //2nd option from the dropdown which was added in setup fn
       const confirmationMessage = screen.getByText(
-        'Are you sure you want to delete this city from the list?'
+        `Are you sure you want to delete ${cityName} from the list?`
       )
       expect(confirmationMessage).toBeInTheDocument()
     })

@@ -1,4 +1,5 @@
 import { memo, useContext, useState, useRef } from 'react'
+import { toast } from 'react-toastify'
 
 import { ALLOWED_CITIES, API_URL } from '../utilities/constants'
 import StoreContext from '../store/storeContext'
@@ -52,9 +53,19 @@ const AddCityModal = memo(() => {
 
   const handleSave = async () => {
     if (formRef.current.checkValidity()) {
+      let toastId
+      const toastOptions = {
+        isLoading: false,
+        autoClose: 5000,
+        closeButton: true
+      }
+
+      const cityName = fields.timezone.split('/')[1].replace('_', ' ')
+
       try {
         // Set isLoading to true
         setIsModalSaving(true)
+        toastId = toast.loading(`Adding ${cityName} to the list. Please wait...`)
 
         const response = await fetch(`${API_URL}/${fields.timezone}`)
         const data = await response.json()
@@ -65,12 +76,18 @@ const AddCityModal = memo(() => {
         setCities((prevCities) => [
           ...prevCities,
           {
-            name: data.timezone.split('/')[1].replace('_', ' '),
+            name: cityName,
             label: fields.label,
             timezone: data.timezone,
             timezoneAbbreviation: data.abbreviation
           }
         ])
+
+        toast.update(toastId, {
+          render: `Added ${cityName} to the list successfully`,
+          type: 'success',
+          ...toastOptions
+        })
 
         // Set isLoading to false
         setIsModalSaving(false)
@@ -79,6 +96,12 @@ const AddCityModal = memo(() => {
         handleClose()
       } catch (error) {
         console.error(error)
+
+        toast.update(toastId, {
+          render: `Problem adding ${cityName} to the list. Please check the console for errors.`,
+          type: 'error',
+          ...toastOptions
+        })
 
         // Set isLoading to false
         setIsModalSaving(false)

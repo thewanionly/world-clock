@@ -17,6 +17,11 @@
 
   --orange-color: #f49f85;
   --sky-blue-color: #62bcfa;
+
+  // Override react-toastify colors
+  --toastify-color-success: var(--primary-color);
+  --toastify-color-error: var(--danger-color);
+  --toastify-spinner-color: var(--secondary-color);
 }
 
 *,
