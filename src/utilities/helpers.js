@@ -15,7 +15,7 @@ const getLocalTime = (timeZone) => {
   return getLocalDate(timeZone, timeOptions)
 }
 
-const getTimeDifference = (baseTimeZone, timeZone, unit = 'hours') => {
+const getTimeDifference = (baseTimeZone, timeZone, unit = 'hour') => {
   // Convert dates to ms
   const baseTime = new Date(getLocalDate(baseTimeZone)).getTime()
   const time = new Date(getLocalDate(timeZone)).getTime()
@@ -26,12 +26,11 @@ const getTimeDifference = (baseTimeZone, timeZone, unit = 'hours') => {
 
   // Get diff in seconds
   const timeDiffSec = Math.floor(timeDiffMs / 1000)
-  if (unit === 'seconds') return timeDiffSec
+  if (unit === 'second') return timeDiffSec
 
   // Get diff in minutes
-
   const timeDiffMin = Math.floor(timeDiffSec / 60)
-  if (unit === 'minutes') return timeDiffMin
+  if (unit === 'minute') return timeDiffMin
 
   // Get diff in hours
   const timeDiffHr = Math.floor(timeDiffMin / 60)
@@ -39,7 +38,8 @@ const getTimeDifference = (baseTimeZone, timeZone, unit = 'hours') => {
 }
 
 // Format diff to text
-const formatTimeDifference = (timeDiff, baseCity, timeUnit = 'hours') => {
+const formatTimeDifference = (timeDiff, baseCity, unit = 'hour') => {
+  const timeUnit = Math.abs(timeDiff) > 1 ? `${unit}s` : unit
   let adverb = ''
 
   if (timeDiff < 0) {
