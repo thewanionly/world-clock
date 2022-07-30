@@ -3,6 +3,8 @@ import Input from './Input'
 import Select from './Select'
 import Modal from './Modal'
 
+const API_URL = 'https://worldtimeapi.org/api/timezone'
+
 const ALLOWED_CITIES = [
   {
     label: 'Singapore',
@@ -46,16 +48,22 @@ const ALLOWED_CITIES = [
   }
 ]
 
-const AddCityModal = memo(({ handleClose }) => {
+const AddCityModal = memo(({ cities, setCities, handleClose }) => {
   const formRef = useRef(null)
   const [fields, setFields] = useState({
-    name: '',
+    timezone: '',
     label: ''
   })
   const [errors, setErrors] = useState({
-    name: '',
+    timezone: '',
     label: ''
   })
+
+  const [isSaving, setIsSaving] = useState(false)
+
+  const validCityOptions = ALLOWED_CITIES.filter(
+    ({ value }) => !cities.length || !cities.some(({ timezone }) => timezone === value)
+  )
 
   const handleFieldChange = (event) => {
     const { name, value } = event.target
@@ -84,12 +92,42 @@ const AddCityModal = memo(({ handleClose }) => {
     }))
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (formRef.current.checkValidity()) {
-      console.log('save', fields)
+      try {
+        // Set isLoading to true
+        setIsSaving(true)
+
+        const response = await fetch(`${API_URL}/${fields.timezone}`)
+        const data = await response.json()
+
+        if (!response.ok) throw new Error(`Error fetching data: (${response.status})`)
+
+        // Add the city to the city list
+        setCities((prevCities) => [
+          ...prevCities,
+          {
+            name: data.timezone.split('/')[1].replace('_', ' '),
+            label: fields.label,
+            timezone: data.timezone,
+            timezoneAbbreviation: data.abbreviation
+          }
+        ])
+
+        // Set isLoading to false
+        setIsSaving(false)
+
+        // Close modal
+        handleClose()
+      } catch (error) {
+        console.error(error)
+
+        // Set isLoading to false
+        setIsSaving(false)
+      }
     } else {
       formRef.current.reportValidity()
-      handleErrorChange('name', 'Please select a city name')
+      handleErrorChange('timezone', 'Please select a city name')
     }
   }
 
@@ -105,13 +143,13 @@ const AddCityModal = memo(({ handleClose }) => {
           className='form-input'
           label='Name of city'
           placeholder='Select a city...'
-          id='name'
-          name='name'
-          options={ALLOWED_CITIES}
-          value={fields.name}
+          id='timezone'
+          name='timezone'
+          options={validCityOptions}
+          value={validCityOptions.find(({ value }) => value === fields.timezone)?.label || ''}
           onChange={handleSelectFieldChange}
           required
-          error={errors.name}
+          error={errors.timezone}
         />
         <Input
           className='form-input'

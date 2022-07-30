@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event'
 import { getLocalTime, getTimeDifference, formatTimeDifference } from './utilities/helpers'
 import App from './App'
 import CityCard from './components/CityCard'
+import Cities from './components/Cities'
 
 const myCity = {
   name: 'Cebu City',
@@ -75,11 +76,11 @@ describe('My City section', () => {
 })
 
 describe('Cities section', () => {
-  xit('displays an empty list by default', () => {
+  it('displays an empty list by default', () => {
     setup()
 
-    const cityList = screen.getByTestId('city-list')
-    expect(cityList).toBeEmptyDOMElement()
+    const cityList = screen.queryAllByTestId('city-item')
+    expect(cityList.length).toBe(0)
   })
 
   it('displays an enabled "Add city" button', () => {
@@ -99,6 +100,41 @@ describe('Cities section', () => {
 
     expect(screen.getByTestId('modal')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Add City' })).toBeInTheDocument()
+  })
+
+  it('disabled "Add city" button when there are already 4 cities in the list', () => {
+    render(
+      <Cities
+        baseCity={myCity}
+        cities={[
+          {
+            name: 'London',
+            label: 'Nice city',
+            timezone: 'Europe/London',
+            timezoneAbbreviation: 'BST'
+          },
+          {
+            name: 'Tokyo',
+            label: 'Busy city',
+            timezone: 'Asia/Tokyo',
+            timezoneAbbreviation: 'JST'
+          },
+          {
+            name: 'New York',
+            timezone: 'America/New_York',
+            timezoneAbbreviation: 'AEST'
+          },
+          {
+            name: 'Sydney',
+            timezone: 'Australia/Sydney',
+            timezoneAbbreviation: 'EDT'
+          }
+        ]}
+      />
+    )
+
+    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    expect(addCityButton).toBeDisabled()
   })
 })
 
@@ -204,10 +240,10 @@ describe('Add modal', () => {
     it('shows only the allowed cities in the city name options', async () => {
       setup()
 
-      userEvent.click(screen.getByTestId('name-select-field-container'))
-      await screen.findByTestId('name-select-menu')
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
 
-      const options = screen.getAllByTestId('name-select-option')
+      const options = screen.getAllByTestId('timezone-select-option')
 
       expect(options.length).toBe(ALLOWED_CITIES.length)
 
@@ -235,59 +271,127 @@ describe('Add modal', () => {
       const saveButton = screen.getByRole('button', { name: 'Save' })
       userEvent.click(saveButton)
 
-      userEvent.click(screen.getByTestId('name-select-field-container'))
-      await screen.findByTestId('name-select-menu')
-      userEvent.click(screen.getAllByTestId('name-select-option')[0])
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[0])
 
       expect(screen.queryByText('Please select a city name')).not.toBeInTheDocument()
     })
 
-    xit('can add a new city without description', async () => {
-      setup()
-
-      const closeButton = screen.getByTestId('close-button')
-      userEvent.click(closeButton)
+    it('can add a new city without short label', async () => {
+      render(<App />)
 
       // Check the existing cities
-      const existingCities = screen.getAllByTestId('city-item')
-      console.log(existingCities)
-      // existingCities.forEach((cityItem, index) => {
-      //   expect(cityItem.textContent).toBe(ALLOWED_CITIES[index].label)
-      // })
+      expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
-      // expect(screen.getAllByTestId('city-item').length).toBe(0)
+      // Open modal
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
 
-      // // Open modal
-      // setup()
+      // Select the 2nd city in the options
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[1])
 
-      // // Select the first city
-      // userEvent.click(screen.getByTestId('name-select-field-container'))
-      // await screen.findByTestId('name-select-menu')
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
-      // const selectedCity = screen.getAllByTestId('name-select-option')[0]
-      // userEvent.click(selectedCity)
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
 
-      // // Save
-      // userEvent.click(screen.getByRole('button', { name: 'Save' }))
+      // Get all cities
+      const cityList = screen.getAllByTestId('city-item')
 
-      // // Wait for modal to be removed
-      // await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      // Expected output when selecting the 2nd city
+      const expectedOutput = {
+        name: ALLOWED_CITIES[1].value.split('/')[1].replace('_', ' '),
+        label: '',
+        timezone: ALLOWED_CITIES[1].value,
+        timezoneAbbreviation: 'JST'
+      }
 
-      // // Get all cities
-      // const cityItems = screen.getAllByTestId('city-item')
-
-      // // Expect the selected city to be in the cities list
-      // expect(cityItems.length).toBe(existingCitiesLength + 1)
-      // expect(cityItems[cityItems.length - 1].textContent).toBe(selectedCity.textContent)
+      // Expect the selected city to be in the cities list
+      expect(cityList.length).toBe(1)
+      expect(screen.getByTestId('city-name').textContent).toBe(expectedOutput.name)
+      expect(screen.getByTestId('city-label').textContent).toBe(expectedOutput.label)
+      expect(screen.getByTestId('city-time').textContent).toBe(
+        getLocalTime(expectedOutput.timezone)
+      )
+      expect(screen.getByTestId('city-tmz-abbrev').textContent).toBe(
+        expectedOutput.timezoneAbbreviation
+      )
+      expect(screen.getByTestId('city-time-diff').textContent).toBe(
+        formatTimeDifference(
+          getTimeDifference(myCity.timezone, expectedOutput.timezone),
+          myCity.name
+        )
+      )
     })
 
-    xit('does not include the already added cities in the city name options', async () => {
-      setup()
+    it('can add a new city with short label', async () => {
+      render(<App />)
 
-      // Select the first city
-      userEvent.click(screen.getByTestId('name-select-field-container'))
-      await screen.findByTestId('name-select-menu')
-      userEvent.click(screen.getAllByTestId('name-select-option')[0])
+      // Check the existing cities
+      expect(screen.queryAllByTestId('city-item').length).toBe(0)
+
+      // Open modal
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Select the 2nd city in the options
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[1])
+
+      // Input a short label
+      userEvent.type(screen.getByLabelText('Short label'), 'test label')
+
+      // Save
+      userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+      // Wait for modal to be removed
+      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+
+      // Get all cities
+      const cityList = screen.getAllByTestId('city-item')
+
+      // Expected output when selecting the 2nd city
+      const expectedOutput = {
+        name: ALLOWED_CITIES[1].value.split('/')[1].replace('_', ' '),
+        label: 'test label',
+        timezone: ALLOWED_CITIES[1].value,
+        timezoneAbbreviation: 'JST'
+      }
+
+      // Expect the selected city to be in the cities list
+      expect(cityList.length).toBe(1)
+      expect(screen.getByTestId('city-name').textContent).toBe(expectedOutput.name)
+      expect(screen.getByTestId('city-label').textContent).toBe(expectedOutput.label)
+      expect(screen.getByTestId('city-time').textContent).toBe(
+        getLocalTime(expectedOutput.timezone)
+      )
+      expect(screen.getByTestId('city-tmz-abbrev').textContent).toBe(
+        expectedOutput.timezoneAbbreviation
+      )
+      expect(screen.getByTestId('city-time-diff').textContent).toBe(
+        formatTimeDifference(
+          getTimeDifference(myCity.timezone, expectedOutput.timezone),
+          myCity.name
+        )
+      )
+    })
+
+    it('does not include the already added cities in the city name options', async () => {
+      render(<App />)
+
+      // Check the existing cities
+      expect(screen.queryAllByTestId('city-item').length).toBe(0)
+
+      // Open modal
+      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+
+      // Select the 1st city in the options
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      userEvent.click(screen.getAllByTestId('timezone-select-option')[0])
 
       // Save
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
@@ -299,11 +403,11 @@ describe('Add modal', () => {
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))
 
       // Open select city dropdown
-      userEvent.click(screen.getByTestId('name-select-field-container'))
-      await screen.findByTestId('name-select-menu')
-      const options = screen.getAllByTestId('name-select-option')
+      userEvent.click(screen.getByTestId('timezone-select-field-container'))
+      await screen.findByTestId('timezone-select-menu')
+      const options = screen.getAllByTestId('timezone-select-option')
 
-      // Expect the first city not to be in the dropdown
+      // Expect the 1st city not to be in the dropdown
       expect(options.length).toBe(ALLOWED_CITIES.length - 1)
       expect(options[0].textContent).toBe(ALLOWED_CITIES[1].label)
     })
@@ -317,10 +421,6 @@ describe('Add modal', () => {
       userEvent.type(screen.getByLabelText('Short label'), inputText)
 
       expect(screen.getByLabelText('Short label')).toHaveValue(allowedText)
-    })
-
-    xit('can add a new city with description', async () => {
-      setup()
     })
   })
 })
