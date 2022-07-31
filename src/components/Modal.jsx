@@ -5,11 +5,20 @@ import { useContext } from 'react'
 import StoreContext from '../store/storeContext'
 import Button from './Button'
 
-const Modal = ({ id, className, title, handleClose, primaryButton, secondaryButton, children }) => {
+const Modal = ({
+  id,
+  className,
+  title,
+  handleClose,
+  primaryButton,
+  secondaryButton,
+  children,
+  isVisible
+}) => {
   const { isModalSaving } = useContext(StoreContext)
 
   return (
-    <div className={`modal ${className}`} data-testid={`${id}-modal`}>
+    <div className={`modal ${isVisible ? 'visible' : ''} ${className}`} data-testid={`${id}-modal`}>
       <div className='modal__content'>
         <div className='modal__header'>
           <h3 className='modal__title'>{title}</h3>
@@ -48,6 +57,9 @@ const Modal = ({ id, className, title, handleClose, primaryButton, secondaryButt
             </Button>
           )}
         </div>
+        {isVisible && (
+          <div data-testid={`${id}-modal-open-indicator`} className='modal__open-indicator' />
+        )}
       </div>
     </div>
   )
@@ -60,6 +72,7 @@ Modal.propTypes = {
   handleClose: PropTypes.func,
   primaryButton: PropTypes.object,
   secondaryButton: PropTypes.object,
-  children: PropTypes.element
+  children: PropTypes.element,
+  isVisible: PropTypes.bool
 }
 export default Modal

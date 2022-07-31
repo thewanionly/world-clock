@@ -72,6 +72,7 @@
     width: 50rem;
     background-color: var(--white-color);
     border-radius: 1rem;
+    position: relative;
   }
 
   &__header {
@@ -117,6 +118,12 @@
   &__footer {
     display: flex;
     gap: 2rem;
+  }
+
+  &__open-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 }
 
