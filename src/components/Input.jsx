@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Input = ({
   className = '',
   id,
@@ -33,6 +35,20 @@ const Input = ({
       {error && <p className='input__error'>{error}</p>}
     </div>
   )
+}
+
+Input.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  label: PropTypes.string,
+  description: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  maxLength: PropTypes.string,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  error: PropTypes.string
 }
 
 export default Input

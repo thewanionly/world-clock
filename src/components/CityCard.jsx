@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { getTimeDifference, formatTimeDifference } from '../utilities/helpers'
 
 import Button from './Button'
@@ -52,6 +53,13 @@ const CityCard = ({ className = '', city, baseCity, handleShowModal }) => {
       </Button>
     </div>
   )
+}
+
+CityCard.propTypes = {
+  className: PropTypes.string,
+  city: PropTypes.object,
+  baseCity: PropTypes.object,
+  handleShowModal: PropTypes.func
 }
 
 export default CityCard

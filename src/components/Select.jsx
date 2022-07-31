@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import { useState } from 'react'
 
 const Select = ({
@@ -72,6 +74,19 @@ const Select = ({
       {error && <p className='select__error'>{error}</p>}
     </div>
   )
+}
+
+Select.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  label: PropTypes.string,
+  description: PropTypes.string,
+  options: PropTypes.array,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  error: PropTypes.string
 }
 
 export default Select

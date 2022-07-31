@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import { useContext } from 'react'
 
 import StoreContext from '../store/storeContext'
@@ -28,9 +30,11 @@ const Modal = ({ id, className, title, handleClose, primaryButton, secondaryButt
               onClick={primaryButton.handler}
               disabled={isModalSaving}
             >
-              {!isModalSaving
-                ? primaryButton.label
-                : primaryButton.labelLoading || primaryButton.label}
+              <span>
+                {!isModalSaving
+                  ? primaryButton.label
+                  : primaryButton.labelLoading || primaryButton.label}
+              </span>
             </Button>
           )}
           {secondaryButton && (
@@ -40,7 +44,7 @@ const Modal = ({ id, className, title, handleClose, primaryButton, secondaryButt
               onClick={secondaryButton.handler}
               disabled={isModalSaving}
             >
-              {!isModalSaving ? secondaryButton.label : secondaryButton.labelLoading}
+              <span>{!isModalSaving ? secondaryButton.label : secondaryButton.labelLoading}</span>
             </Button>
           )}
         </div>
@@ -49,4 +53,13 @@ const Modal = ({ id, className, title, handleClose, primaryButton, secondaryButt
   )
 }
 
+Modal.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  title: PropTypes.string,
+  handleClose: PropTypes.func,
+  primaryButton: PropTypes.object,
+  secondaryButton: PropTypes.object,
+  children: PropTypes.element
+}
 export default Modal
