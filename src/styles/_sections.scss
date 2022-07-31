@@ -11,10 +11,26 @@
     gap: 4rem;
     justify-content: space-between;
     align-items: center;
+  }
 
-    @media only screen and (max-width: $bp-mobile) {
-      flex-direction: column;
-      text-align: center;
+  &__right {
+    text-align: end;
+  }
+
+  &__add-button {
+    margin-bottom: 1rem;
+  }
+
+  @media only screen and (max-width: $bp-mobile) {
+    .header {
+      &__container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      &__right {
+        text-align: center;
+      }
     }
   }
 }

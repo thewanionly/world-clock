@@ -24,12 +24,15 @@ const Header = () => {
         </div>
         <div className='header__right'>
           <Button
-            className='cities__add-button button__primary'
+            className='header__add-button button__primary'
             onClick={() => handleShowModal('add')}
             disabled={cities.length >= 4}
           >
             Add city
           </Button>
+          <p className='header__add-city-limit'>
+            <em>You can add up to 4 cities</em>
+          </p>
         </div>
       </div>
     </section>
