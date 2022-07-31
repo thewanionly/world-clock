@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
-
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import StoreContext from '../store/storeContext'
 import Button from './Button'
@@ -16,6 +15,10 @@ const Modal = ({
   isVisible
 }) => {
   const { isModalSaving } = useContext(StoreContext)
+
+  useEffect(() => {
+    document.body.style.overflow = isVisible ? 'hidden' : 'unset'
+  }, [isVisible])
 
   return (
     <div className={`modal ${isVisible ? 'visible' : ''} ${className}`} data-testid={`${id}-modal`}>
