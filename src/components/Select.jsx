@@ -9,6 +9,7 @@ const Select = ({
   name,
   label,
   description,
+  placeholder,
   options = [],
   value,
   onChange,
@@ -55,6 +56,7 @@ const Select = ({
             id={id}
             name={name}
             value={value}
+            placeholder={placeholder}
             required={required}
             onChange={() => {}}
             autoComplete='off'
@@ -87,6 +89,7 @@ Select.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   description: PropTypes.string,
+  placeholder: PropTypes.string,
   options: PropTypes.array,
   value: PropTypes.string,
   onChange: PropTypes.func,
