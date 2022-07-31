@@ -7,7 +7,7 @@ import Input from './Input'
 import Select from './Select'
 import Modal from './Modal'
 
-const AddCityModal = memo(() => {
+const AddCityModal = memo(({ isVisible }) => {
   const formRef = useRef(null)
   const { cities, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
 
@@ -119,7 +119,13 @@ const AddCityModal = memo(() => {
   }
 
   return (
-    <Modal title='Add City' handleClose={handleClose} primaryButton={primaryButton}>
+    <Modal
+      id='add'
+      className={isVisible ? 'visible' : ''}
+      title={isVisible && 'Add City'}
+      handleClose={handleClose}
+      primaryButton={primaryButton}
+    >
       <form ref={formRef} className='form-group'>
         <Select
           className='form-input'

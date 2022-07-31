@@ -49,13 +49,12 @@ describe('My City section', () => {
   it(`displays "Add city" modal after clicking "Add city" button`, () => {
     setup()
 
-    expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
 
     const addCityButton = screen.getByRole('button', { name: 'Add city' })
     userEvent.click(addCityButton)
 
-    expect(screen.getByTestId('modal')).toBeInTheDocument()
+    expect(screen.getByTestId('add-modal')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Add City' })).toBeInTheDocument()
   })
 })
@@ -90,7 +89,7 @@ describe('Addding a city', () => {
 
     it('displays close button', () => {
       setup()
-      const closeButton = screen.getByTestId('close-button')
+      const closeButton = screen.getByTestId('add-close-button')
       expect(closeButton).toBeInTheDocument()
     })
 
@@ -116,7 +115,7 @@ describe('Addding a city', () => {
   describe('Interaction', () => {
     it('can close modal through "X" button', () => {
       setup()
-      const closeButton = screen.getByTestId('close-button')
+      const closeButton = screen.getByTestId('add-close-button')
       userEvent.click(closeButton)
 
       expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
@@ -184,7 +183,7 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       // Get all cities
       const cityList = screen.getAllByTestId('city-item')
@@ -240,7 +239,7 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       // Get all cities
       const cityList = screen.getAllByTestId('city-item')
@@ -293,7 +292,7 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       // Open the modal again
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))
@@ -340,7 +339,7 @@ describe('Addding a city', () => {
         userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
         // Wait for modal to be removed
-        await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+        await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
       }
 
       const addCityButton = screen.getByRole('button', { name: 'Add city' })
@@ -412,7 +411,6 @@ describe('City Card component', () => {
       </StoreProvider>
     )
 
-    expect(screen.queryByTestId('modal')).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
 
     // Open add modal
@@ -427,12 +425,12 @@ describe('City Card component', () => {
     userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     // Wait for modal to be removed
-    await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+    await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
     const cityDeleteButton = await screen.findByTestId('city-delete-button')
     userEvent.click(cityDeleteButton)
 
-    expect(screen.getByTestId('modal')).toBeInTheDocument()
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Delete City' })).toBeInTheDocument()
   })
 })
@@ -457,7 +455,7 @@ describe('Deleting a city', () => {
     userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     // Wait for modal to be removed
-    await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+    await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
     const cityDeleteButton = await screen.findByTestId('city-delete-button')
     userEvent.click(cityDeleteButton)
@@ -472,7 +470,7 @@ describe('Deleting a city', () => {
 
     it('displays close button', async () => {
       await setup()
-      const closeButton = screen.getByTestId('close-button')
+      const closeButton = screen.getByTestId('delete-close-button')
       expect(closeButton).toBeInTheDocument()
     })
 
@@ -487,13 +485,13 @@ describe('Deleting a city', () => {
 
     it('displays Delete button', async () => {
       await setup()
-      const deleteButton = screen.getByTestId('modal-primary-button')
+      const deleteButton = screen.getByTestId('delete-modal-primary-button')
       expect(deleteButton).toBeInTheDocument()
     })
 
     it('displays Cancel button', async () => {
       await setup()
-      const cancelButton = screen.getByTestId('modal-secondary-button')
+      const cancelButton = screen.getByTestId('delete-modal-secondary-button')
       expect(cancelButton).toBeInTheDocument()
     })
   })
@@ -501,7 +499,7 @@ describe('Deleting a city', () => {
   describe('Interaction', () => {
     it('can close modal through "X" button', async () => {
       await setup()
-      const closeButton = screen.getByTestId('close-button')
+      const closeButton = screen.getByTestId('delete-close-button')
       userEvent.click(closeButton)
 
       expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
@@ -509,7 +507,7 @@ describe('Deleting a city', () => {
 
     it('closes the modal when Cancel button is clicked', async () => {
       await setup()
-      const cancelButton = screen.getByTestId('modal-secondary-button')
+      const cancelButton = screen.getByTestId('delete-modal-secondary-button')
       userEvent.click(cancelButton)
 
       expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
@@ -537,7 +535,7 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       // Open add modal again
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))
@@ -554,7 +552,7 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       const cityCardDeleteButtons = await screen.findAllByTestId('city-delete-button')
 
@@ -562,7 +560,7 @@ describe('Deleting a city', () => {
       userEvent.click(cityCardDeleteButtons[1])
 
       // Delete the city (2nd city)
-      const deleteButton = screen.getByTestId('modal-primary-button')
+      const deleteButton = screen.getByTestId('delete-modal-primary-button')
       userEvent.click(deleteButton)
 
       // Expected data of the 2nd city
@@ -609,7 +607,7 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
 
       // Open add modal again
       userEvent.click(screen.getByRole('button', { name: 'Add city' }))
@@ -624,13 +622,13 @@ describe('Deleting a city', () => {
       expect(optionsBefore[0].textContent).toBe(ALLOWED_CITIES[1].label)
 
       // Close modal
-      userEvent.click(screen.getByTestId('close-button'))
+      userEvent.click(screen.getByTestId('add-close-button'))
 
       // Click the delete button on the 1st city card
       userEvent.click(await screen.findByTestId('city-delete-button'))
 
       // Delete the 1st city
-      const deleteButton = screen.getByTestId('modal-primary-button')
+      const deleteButton = screen.getByTestId('delete-modal-primary-button')
       userEvent.click(deleteButton)
 
       // Open add modal again

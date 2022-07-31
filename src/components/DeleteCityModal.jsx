@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import StoreContext from '../store/storeContext'
 import Modal from './Modal'
 
-const DeleteCityModal = memo(({ data }) => {
+const DeleteCityModal = memo(({ data = {}, isVisible }) => {
   const { setCities, handleClose } = useContext(StoreContext)
 
   const handleDelete = () => {
@@ -34,7 +34,9 @@ const DeleteCityModal = memo(({ data }) => {
 
   return (
     <Modal
-      title='Delete City'
+      id='delete'
+      className={isVisible ? 'visible' : ''}
+      title={isVisible && 'Delete City'}
       handleClose={handleClose}
       primaryButton={primaryButton}
       secondaryButton={secondaryButton}

@@ -17,8 +17,8 @@ const App = () => {
   return (
     <div className='app'>
       <ToastContainer />
-      {showModal.type === 'add' && <AddCityModal />}
-      {showModal.type === 'delete' && <DeleteCityModal data={showModal.data} />}
+      <AddCityModal isVisible={showModal.type === 'add'} />
+      <DeleteCityModal data={showModal.data} isVisible={showModal.type === 'delete'} />
       <Header />
       <Cities />
     </div>
