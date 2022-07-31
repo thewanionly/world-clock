@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
-
 import { useState } from 'react'
+
+import { useClickOutside } from '../utilities/hooks'
 
 const Select = ({
   className = '',
@@ -24,6 +25,9 @@ const Select = ({
     setIsOptionsOpen(false)
   }
 
+  // Close dropdown menu when user clicked outside
+  const selectContainerRef = useClickOutside(handleCloseOptions)
+
   const handleSelectOption = (e, value) => {
     e.stopPropagation()
     onChange(name, value)
@@ -38,6 +42,7 @@ const Select = ({
       {required && <span className='select__required-indicator'>*</span>}
       {description && <p className='select__description'>{description}</p>}
       <div
+        ref={selectContainerRef}
         className={`select__container ${error ? 'has-error' : ''} ${
           isOptionsOpen ? 'is-focused' : ''
         }`}
