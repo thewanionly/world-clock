@@ -21,8 +21,12 @@ const Modal = ({
   }, [isVisible])
 
   return (
-    <div className={`modal ${isVisible ? 'visible' : ''} ${className}`} data-testid={`${id}-modal`}>
-      <div className='modal__content'>
+    <div
+      className={`modal ${isVisible ? 'visible' : ''} ${className}`}
+      data-testid={`${id}-modal`}
+      onClick={handleClose}
+    >
+      <div className='modal__content' onClick={(e) => e.stopPropagation()}>
         <div className='modal__header'>
           <h3 className='modal__title'>{title}</h3>
           <span
