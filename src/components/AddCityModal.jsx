@@ -26,6 +26,20 @@ const AddCityModal = memo(({ isVisible }) => {
     ({ value }) => !cities.length || !cities.some(({ timezone }) => timezone === value)
   )
 
+  const handleCloseAndResetState = () => {
+    setFields({
+      timezone: '',
+      label: ''
+    })
+
+    setErrors({
+      timezone: '',
+      label: ''
+    })
+
+    handleClose()
+  }
+
   const handleFieldChange = (event) => {
     const { name, value } = event.target
 
@@ -94,8 +108,8 @@ const AddCityModal = memo(({ isVisible }) => {
         // Set isLoading to false
         setIsModalSaving(false)
 
-        // Close modal
-        handleClose()
+        // Reset state and close modal
+        handleCloseAndResetState()
       } catch (error) {
         console.error(error)
 
@@ -125,7 +139,7 @@ const AddCityModal = memo(({ isVisible }) => {
       id='add'
       className={isVisible ? 'visible' : ''}
       title={isVisible ? 'Add City' : ''}
-      handleClose={handleClose}
+      handleClose={handleCloseAndResetState}
       primaryButton={primaryButton}
     >
       <form ref={formRef} className='form-group'>
