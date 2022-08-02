@@ -4,7 +4,8 @@ import { myCity } from '../utilities/constants'
 
 import StoreContext from '../store/storeContext'
 import CityCard from './CityCard'
-import { ReactComponent as EmptyCitiesImg } from '../assets/images/in_no_time.svg'
+
+import EmptyCitiesState from './EmptyCitiesState'
 
 const Cities = () => {
   const { cities = [], handleShowModal } = useContext(StoreContext)
@@ -25,11 +26,7 @@ const Cities = () => {
             ))}
           </div>
         ) : (
-          <div className='cities__empty-image'>
-            <h4>No cities to show</h4>
-            <p>Click on "Add city" button above to add one.</p>
-            <EmptyCitiesImg />
-          </div>
+          <EmptyCitiesState />
         )}
       </div>
     </section>

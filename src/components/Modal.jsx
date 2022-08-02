@@ -6,7 +6,7 @@ import Button from './Button'
 
 const Modal = ({
   id,
-  className,
+  className = '',
   title,
   handleClose,
   primaryButton,
