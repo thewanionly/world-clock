@@ -27,6 +27,7 @@ const Header = () => {
             className='header__add-button button__primary'
             onClick={() => handleShowModal('add')}
             disabled={cities.length >= 4}
+            dataTestId='header-add-city-button'
           >
             Add city
           </Button>

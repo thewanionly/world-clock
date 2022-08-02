@@ -42,7 +42,7 @@ describe('My City section', () => {
   it('displays an enabled "Add city" button', () => {
     setup()
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     expect(addCityButton).toBeEnabled()
   })
 
@@ -51,7 +51,7 @@ describe('My City section', () => {
 
     expect(screen.queryByTestId('add-modal-open-indicator')).not.toBeInTheDocument()
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     userEvent.click(addCityButton)
 
     expect(screen.getByTestId('add-modal')).toBeInTheDocument()
@@ -76,7 +76,7 @@ describe('Addding a city', () => {
       </StoreProvider>
     )
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     userEvent.click(addCityButton)
   }
 
@@ -172,7 +172,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 2nd city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -225,7 +225,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 2nd city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -281,7 +281,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -295,7 +295,7 @@ describe('Addding a city', () => {
       await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open the modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -328,7 +328,7 @@ describe('Addding a city', () => {
       // Add city four times
       for (let i = 0; i < 4; i++) {
         // Open modal
-        userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+        userEvent.click(screen.getByTestId('header-add-city-button'))
 
         // Select the 2nd city in the options
         userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -342,7 +342,7 @@ describe('Addding a city', () => {
         await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
       }
 
-      const addCityButton = screen.getByRole('button', { name: 'Add city' })
+      const addCityButton = screen.getByTestId('header-add-city-button')
       expect(addCityButton).toBeDisabled()
     })
   })
@@ -414,7 +414,7 @@ describe('City Card component', () => {
     expect(screen.queryByTestId('delete-modal-open-indicator')).not.toBeInTheDocument()
 
     // Open add modal
-    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+    userEvent.click(screen.getByTestId('header-add-city-button'))
 
     // Select the 2nd city in the options
     userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -444,7 +444,7 @@ describe('Deleting a city', () => {
     )
 
     // Open add modal
-    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+    userEvent.click(screen.getByTestId('header-add-city-button'))
 
     // Select the 2nd city in the options
     userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -521,7 +521,7 @@ describe('Deleting a city', () => {
       )
 
       // Open add modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -538,7 +538,7 @@ describe('Deleting a city', () => {
       await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options (2nd city in the ALLOWED_CITIES array)
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -596,7 +596,7 @@ describe('Deleting a city', () => {
       )
 
       // Open add modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -610,7 +610,7 @@ describe('Deleting a city', () => {
       await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -632,7 +632,7 @@ describe('Deleting a city', () => {
       userEvent.click(deleteButton)
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
