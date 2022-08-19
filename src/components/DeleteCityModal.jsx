@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types'
 import { memo, useContext } from 'react'
 import { toast } from 'react-toastify'
 
 import StoreContext from '../store/storeContext'
 import Modal from './Modal'
 
-const DeleteCityModal = memo(({ data = {}, isVisible }) => {
-  const { setCities, handleClose } = useContext(StoreContext)
+const DeleteCityModal = memo(() => {
+  const { setCities, handleClose, showModal } = useContext(StoreContext)
+
+  const { data = {} } = showModal || {}
 
   const handleDelete = () => {
     try {
@@ -36,8 +37,8 @@ const DeleteCityModal = memo(({ data = {}, isVisible }) => {
   return (
     <Modal
       id='delete'
-      className={isVisible ? 'visible' : ''}
-      title={isVisible ? 'Delete City' : ''}
+      title='Delete City'
+      isVisible={showModal.type === 'delete'}
       handleClose={handleClose}
       primaryButton={primaryButton}
       secondaryButton={secondaryButton}
@@ -46,10 +47,5 @@ const DeleteCityModal = memo(({ data = {}, isVisible }) => {
     </Modal>
   )
 })
-
-DeleteCityModal.propTypes = {
-  data: PropTypes.object,
-  isVisible: PropTypes.bool
-}
 
 export default DeleteCityModal

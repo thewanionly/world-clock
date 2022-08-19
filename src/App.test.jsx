@@ -42,16 +42,16 @@ describe('My City section', () => {
   it('displays an enabled "Add city" button', () => {
     setup()
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     expect(addCityButton).toBeEnabled()
   })
 
   it(`displays "Add city" modal after clicking "Add city" button`, () => {
     setup()
 
-    expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
+    expect(screen.queryByTestId('add-modal-open-indicator')).not.toBeInTheDocument()
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     userEvent.click(addCityButton)
 
     expect(screen.getByTestId('add-modal')).toBeInTheDocument()
@@ -76,7 +76,7 @@ describe('Addding a city', () => {
       </StoreProvider>
     )
 
-    const addCityButton = screen.getByRole('button', { name: 'Add city' })
+    const addCityButton = screen.getByTestId('header-add-city-button')
     userEvent.click(addCityButton)
   }
 
@@ -118,7 +118,7 @@ describe('Addding a city', () => {
       const closeButton = screen.getByTestId('add-close-button')
       userEvent.click(closeButton)
 
-      expect(screen.queryByRole('heading', { name: 'Add City' })).not.toBeInTheDocument()
+      expect(screen.queryByTestId('add-modal-open-indicator')).not.toBeInTheDocument()
     })
 
     it('shows only the allowed cities in the city name options', async () => {
@@ -172,7 +172,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 2nd city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -183,7 +183,7 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Get all cities
       const cityList = screen.getAllByTestId('city-item')
@@ -225,7 +225,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 2nd city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -239,7 +239,7 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Get all cities
       const cityList = screen.getAllByTestId('city-item')
@@ -281,7 +281,7 @@ describe('Addding a city', () => {
       expect(screen.queryAllByTestId('city-item').length).toBe(0)
 
       // Open modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -292,10 +292,10 @@ describe('Addding a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open the modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -328,7 +328,7 @@ describe('Addding a city', () => {
       // Add city four times
       for (let i = 0; i < 4; i++) {
         // Open modal
-        userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+        userEvent.click(screen.getByTestId('header-add-city-button'))
 
         // Select the 2nd city in the options
         userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -339,10 +339,10 @@ describe('Addding a city', () => {
         userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
         // Wait for modal to be removed
-        await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+        await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
       }
 
-      const addCityButton = screen.getByRole('button', { name: 'Add city' })
+      const addCityButton = screen.getByTestId('header-add-city-button')
       expect(addCityButton).toBeDisabled()
     })
   })
@@ -411,10 +411,10 @@ describe('City Card component', () => {
       </StoreProvider>
     )
 
-    expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+    expect(screen.queryByTestId('delete-modal-open-indicator')).not.toBeInTheDocument()
 
     // Open add modal
-    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+    userEvent.click(screen.getByTestId('header-add-city-button'))
 
     // Select the 2nd city in the options
     userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -425,7 +425,7 @@ describe('City Card component', () => {
     userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     // Wait for modal to be removed
-    await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+    await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
     const cityDeleteButton = await screen.findByTestId('city-delete-button')
     userEvent.click(cityDeleteButton)
@@ -444,7 +444,7 @@ describe('Deleting a city', () => {
     )
 
     // Open add modal
-    userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+    userEvent.click(screen.getByTestId('header-add-city-button'))
 
     // Select the 2nd city in the options
     userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -455,7 +455,7 @@ describe('Deleting a city', () => {
     userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
     // Wait for modal to be removed
-    await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+    await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
     const cityDeleteButton = await screen.findByTestId('city-delete-button')
     userEvent.click(cityDeleteButton)
@@ -502,7 +502,7 @@ describe('Deleting a city', () => {
       const closeButton = screen.getByTestId('delete-close-button')
       userEvent.click(closeButton)
 
-      expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+      expect(screen.queryByTestId('delete-modal-open-indicator')).not.toBeInTheDocument()
     })
 
     it('closes the modal when Cancel button is clicked', async () => {
@@ -510,7 +510,7 @@ describe('Deleting a city', () => {
       const cancelButton = screen.getByTestId('delete-modal-secondary-button')
       userEvent.click(cancelButton)
 
-      expect(screen.queryByRole('heading', { name: 'Delete City' })).not.toBeInTheDocument()
+      expect(screen.queryByTestId('delete-modal-open-indicator')).not.toBeInTheDocument()
     })
 
     it('deletes the city from the list when Delete button is clicked', async () => {
@@ -521,7 +521,7 @@ describe('Deleting a city', () => {
       )
 
       // Open add modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -535,10 +535,10 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options (2nd city in the ALLOWED_CITIES array)
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -552,7 +552,7 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       const cityCardDeleteButtons = await screen.findAllByTestId('city-delete-button')
 
@@ -596,7 +596,7 @@ describe('Deleting a city', () => {
       )
 
       // Open add modal
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Select the 1st city in the options
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -607,10 +607,10 @@ describe('Deleting a city', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save' }))
 
       // Wait for modal to be removed
-      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Add City' }))
+      await waitForElementToBeRemoved(() => screen.queryByTestId('add-modal-open-indicator'))
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))
@@ -632,7 +632,7 @@ describe('Deleting a city', () => {
       userEvent.click(deleteButton)
 
       // Open add modal again
-      userEvent.click(screen.getByRole('button', { name: 'Add city' }))
+      userEvent.click(screen.getByTestId('header-add-city-button'))
 
       // Open select city dropdown
       userEvent.click(screen.getByTestId('timezone-select-field-container'))

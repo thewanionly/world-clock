@@ -1,17 +1,38 @@
 .header {
-  padding: 7rem 0;
+  padding: 5rem 0;
 
   &__container {
     background-color: var(--secondary-color);
     color: var(--white-color);
     border-radius: 1rem;
     padding: 2.7rem;
+    padding-bottom: 2.2rem;
 
     display: flex;
-    flex-wrap: wrap;
     gap: 4rem;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__right {
+    text-align: end;
+  }
+
+  &__add-button {
+    margin-bottom: 1rem;
+  }
+
+  @media only screen and (max-width: $bp-mobile) {
+    .header {
+      &__container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      &__right {
+        text-align: center;
+      }
+    }
   }
 }
 
@@ -28,7 +49,7 @@
 }
 
 .cities {
-  padding-bottom: 5rem;
+  padding-bottom: 3rem;
 
   &__city-list {
     display: grid;
@@ -40,18 +61,5 @@
 
   &__city-item {
     width: 27rem;
-  }
-
-  &__empty-image {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      width: 55%;
-      height: 55%;
-      min-width: 27rem;
-    }
   }
 }

@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types'
-
 import { memo, useContext, useState, useRef } from 'react'
 import { toast } from 'react-toastify'
 
@@ -9,9 +7,9 @@ import Input from './Input'
 import Select from './Select'
 import Modal from './Modal'
 
-const AddCityModal = memo(({ isVisible }) => {
+const AddCityModal = memo(() => {
   const formRef = useRef(null)
-  const { cities, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
+  const { cities, showModal, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
 
   const [fields, setFields] = useState({
     timezone: '',
@@ -137,8 +135,8 @@ const AddCityModal = memo(({ isVisible }) => {
   return (
     <Modal
       id='add'
-      className={isVisible ? 'visible' : ''}
-      title={isVisible ? 'Add City' : ''}
+      title='Add City'
+      isVisible={showModal.type === 'add'}
       handleClose={handleCloseAndResetState}
       primaryButton={primaryButton}
     >
@@ -171,9 +169,5 @@ const AddCityModal = memo(({ isVisible }) => {
     </Modal>
   )
 })
-
-AddCityModal.propTypes = {
-  isVisible: PropTypes.bool
-}
 
 export default AddCityModal
