@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import StoreContext from './storeContext'
 
@@ -17,11 +17,20 @@ const StoreProvider = ({ children }) => {
     setModalType(null)
   }, [])
 
+  const handleAddCity = useCallback((newCity) => {
+    setCities((prevCities) => [...prevCities, newCity])
+  }, [])
+
+  const handleDeleteCity = useCallback((toDeleteCity) => {
+    setCities((prevCities) => prevCities.filter((city) => city.timezone !== toDeleteCity.timezone))
+  }, [])
+
   return (
     <StoreContext.Provider
       value={{
         cities,
-        setCities,
+        handleAddCity,
+        handleDeleteCity,
         modalType,
         modalData,
         handleShowModal,

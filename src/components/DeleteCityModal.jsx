@@ -5,11 +5,11 @@ import StoreContext from '../store/storeContext'
 import Modal from './Modal'
 
 const DeleteCityModal = memo(() => {
-  const { setCities, handleClose, modalType, modalData = {} } = useContext(StoreContext)
+  const { handleDeleteCity, handleClose, modalType, modalData = {} } = useContext(StoreContext)
 
   const handleDelete = () => {
     try {
-      setCities((prevCities) => prevCities.filter((city) => city.timezone !== modalData.timezone))
+      handleDeleteCity(modalData)
       toast.success(`Deleted ${modalData.name} from the list successfully`)
 
       handleClose()
