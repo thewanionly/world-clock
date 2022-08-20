@@ -48,4 +48,23 @@ const useRealTimeClock = (timeZone) => {
   return [localTime]
 }
 
-export { useClickOutside, useRealTimeClock }
+/**
+ * Similar to componentDidUpdate in class components.
+ *  Callback is executed only when the dependencies are updated, not on first mount.
+ */
+const useEffectUpdate = (callback) => {
+  const isInitialMount = useRef(true)
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      //Do not execute callback during first mount
+      isInitialMount.current = false
+      return
+    }
+
+    //Execute callback after dependency is updated
+    callback()
+  }, [callback])
+}
+
+export { useClickOutside, useEffectUpdate, useRealTimeClock }

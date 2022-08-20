@@ -9,7 +9,8 @@ import Modal from './Modal'
 
 const AddCityModal = memo(() => {
   const formRef = useRef(null)
-  const { cities, showModal, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
+  const { cities, modalType, handleAddCity, handleClose, setIsModalSaving } =
+    useContext(StoreContext)
 
   const [fields, setFields] = useState({
     timezone: '',
@@ -87,15 +88,12 @@ const AddCityModal = memo(() => {
         if (!response.ok) throw new Error(`Error fetching data: (${response.status})`)
 
         // Add the city to the city list
-        setCities((prevCities) => [
-          ...prevCities,
-          {
-            name: cityName,
-            label: fields.label,
-            timezone: data.timezone,
-            timezoneAbbreviation: data.abbreviation
-          }
-        ])
+        handleAddCity({
+          name: cityName,
+          label: fields.label,
+          timezone: data.timezone,
+          timezoneAbbreviation: data.abbreviation
+        })
 
         toast.update(toastId, {
           render: `Added ${cityName} to the list successfully`,
@@ -136,7 +134,7 @@ const AddCityModal = memo(() => {
     <Modal
       id='add'
       title='Add City'
-      isVisible={showModal.type === 'add'}
+      isVisible={modalType === 'add'}
       handleClose={handleCloseAndResetState}
       primaryButton={primaryButton}
     >
