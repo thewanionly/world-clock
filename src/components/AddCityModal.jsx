@@ -9,7 +9,7 @@ import Modal from './Modal'
 
 const AddCityModal = memo(() => {
   const formRef = useRef(null)
-  const { cities, showModal, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
+  const { cities, modalType, setCities, handleClose, setIsModalSaving } = useContext(StoreContext)
 
   const [fields, setFields] = useState({
     timezone: '',
@@ -136,7 +136,7 @@ const AddCityModal = memo(() => {
     <Modal
       id='add'
       title='Add City'
-      isVisible={showModal.type === 'add'}
+      isVisible={modalType === 'add'}
       handleClose={handleCloseAndResetState}
       primaryButton={primaryButton}
     >

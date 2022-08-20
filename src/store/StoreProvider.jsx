@@ -3,16 +3,18 @@ import { useState, useCallback } from 'react'
 import StoreContext from './storeContext'
 
 const StoreProvider = ({ children }) => {
-  const [showModal, setShowModal] = useState(false)
+  const [modalType, setModalType] = useState()
+  const [modalData, setModalData] = useState()
   const [cities, setCities] = useState([])
   const [isModalSaving, setIsModalSaving] = useState(false)
 
   const handleShowModal = (modalType, modalData) => {
-    setShowModal({ type: modalType, data: modalData })
+    setModalType(modalType)
+    setModalData(modalData)
   }
 
   const handleCloseModal = useCallback(() => {
-    setShowModal(false)
+    setModalType(null)
   }, [])
 
   return (
@@ -20,7 +22,8 @@ const StoreProvider = ({ children }) => {
       value={{
         cities,
         setCities,
-        showModal,
+        modalType,
+        modalData,
         handleShowModal,
         handleClose: handleCloseModal,
         isModalSaving,
