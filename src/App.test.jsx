@@ -17,6 +17,10 @@ const setup = () => {
   )
 }
 
+beforeEach(() => {
+  localStorage.clear()
+})
+
 describe('My City section', () => {
   it('displays my city name', () => {
     setup()

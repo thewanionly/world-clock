@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import { useEffectUpdate } from '../utilities/hooks'
 
 import StoreContext from './storeContext'
 
@@ -24,6 +26,21 @@ const StoreProvider = ({ children }) => {
   const handleDeleteCity = useCallback((toDeleteCity) => {
     setCities((prevCities) => prevCities.filter((city) => city.timezone !== toDeleteCity.timezone))
   }, [])
+
+  useEffect(() => {
+    const cachedData = localStorage.getItem(`${window.location.href}cities`)
+
+    if (cachedData) {
+      setCities(JSON.parse(cachedData))
+    }
+  }, [])
+
+  useEffectUpdate(
+    useCallback(() => {
+      // Save to localStorage
+      localStorage.setItem(`${window.location.href}cities`, JSON.stringify(cities))
+    }, [cities])
+  )
 
   return (
     <StoreContext.Provider
